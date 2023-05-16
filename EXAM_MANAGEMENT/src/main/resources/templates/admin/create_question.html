@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="admin/base::layout(~{::section})">
+<head>
+  <meta charset="ISO-8859-1">
+  <title th:text="${title}"></title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    button[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+
+<section>
+  <h1>This is Admin/Tl can create the question</h1>
+  <h1>Add Question</h1>
+  <form method="post" action="/admin/saveQuestion">
+    <label for="questionType">Question Type:</label>
+    <input type="text" id="questionType" name="questionType">
+
+    <label for="option1">Option 1:</label>
+    <input type="text" id="option1" name="option1">
+
+    <label for="option2">Option 2:</label>
+    <input type="text" id="option2" name="option2">
+
+    <label for="option3">Option 3:</label>
+    <input type="text" id="option3" name="option3">
+
+    <label for="option4">Option 4:</label>
+    <input type="text" id="option4" name="option4">
+
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title">
+
+    <label for="correctAnswer">Correct Option:</label>
+    <select id="correctAnswer" name="correctAnswer">
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
+      <option value="option4">Option 4</option>
+    </select>
+
+    <label for="totalMarks">Total Marks:</label>
+    <input type="text" id="totalMarks" name="totalMarks">
+
+    <label for="category">Category:</label>
+    <select id="category" name="category">
+      <option value="java">Java</option>
+      <option value=".net">.Net</option>
+      <option value="testing">Testing</option>
+    </select>
+
+    <label for="level">Level:</label>
+    <select id="level" name="level">
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+
+    </select>
+
+    <label for="setNumber">Question Set:</label>
+    <select id="setNumber" name="setNumber">
+      <option value="1">Set 1</option>
+      <option value="2">Set 2</option>
+      <option value="3">Set 3</option>
+      <option value="4">Set 4</option>
+    </select>
+
+    <label for="questionDescription">Question Description:</label>
+    <input type="text" id="questionDescription" name="questionDescription">
+
+    <button type="submit">Save Question</button>
+  </form>
+</body>
+</section>
+
+</body>
+</html>

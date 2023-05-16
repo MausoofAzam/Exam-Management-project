@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="admin/base::layout(~{::section})">
+<head>
+  <meta charset="ISO-8859-1">
+  <title th:text="${title}"></title>
+</head>
+<body>
+<section>
+    <div class="card mr-3 ml-3">
+        <div class="card-body">
+            <h1 class="text-center"> Student List</h1>
+  <table class="table">
+    <thead>
+    <tr>
+<!--      <th scope="col">#Id</th>-->
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+<!--      <th scope="col">ROLE</th>-->
+      <th scope="col">ACTIVE-STATUS</th>
+      <th scope="col">ACTION</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${userList}">
+<!--      <th scope="row" >1</th>-->
+      <td th:text="${user.name}">Mark</td>
+      <td th:text="${user.email}">Mark</td>
+<!--      <td th:text="${user.role}">Mark</td>-->
+      <td th:text="${user.enabled}">Mark</td>
+        <td>
+           <a th:href="@{/admin/deleteUser/{id}(id=${user.id})}" class="btn btn-danger">Delete</a>
+<!--            <a th:href="@{'/admin/deleteUser/'+{user.id}}" ><i class="fa-solid fa-trash"></i></a>-->
+<!--            <a th:href="@{'/admin/updateUser/'+{user.id}}" ><i class="fa-sharp fa-regular fa-pen-to-square"></i></a>-->
+            <button class="btn-btn primary btn-sm" >GO</button>
+        </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</section>
+
+</body>
+</html>
