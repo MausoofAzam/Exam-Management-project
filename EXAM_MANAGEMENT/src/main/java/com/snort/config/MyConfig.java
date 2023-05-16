@@ -9,21 +9,25 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
 @Configuration
 @EnableWebSecurity
 public class MyConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
-    public UserDetailsService getUserDetailsService(){
+    public UserDetailsService getUserDetailsService() {
         return new UserDetailsServiceImpl();
     }
+
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
-        DaoAuthenticationProvider daoAuthenticationProvider= new DaoAuthenticationProvider();
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(this.getUserDetailsService());
         daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
         return daoAuthenticationProvider;
@@ -31,17 +35,33 @@ public class MyConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.authenticationProvider(daoAuthenticationProvider());
+        auth.authenticationProvider(daoAuthenticationProvider());
     }
+
+    @Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().and().authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user/**").hasRole("USER")
+        http
+                .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/**").permitAll().and().formLogin().loginPage("/signin")
+                .antMatchers("/user/**").hasRole("USER")
+                .antMatchers("/**").permitAll()
+                .and()
+                .formLogin()
+                .loginPage("/signin")
                 .loginProcessingUrl("/dologin")
-                .defaultSuccessUrl("/user/index",true)
-                .defaultSuccessUrl("/admin/index",true)
-                /*.failureUrl("/Login-Fail")*/.and().csrf().disable();
+                .successHandler(customAuthenticationSuccessHandler())
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+//                .logoutSuccessUrl("/")
+                .and()
+                .csrf()
+                .disable();
     }
+
 }
