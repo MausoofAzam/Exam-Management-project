@@ -104,10 +104,7 @@ public class QuestionController {
         }
     }*/
 
-    @GetMapping("/mcq/exam12")
-    public String startExam1(Model model) {
-        return "startExamsDemo";
-    }
+
 
     @DeleteMapping("/deleteQuestion/{id}")
     public String deleteQuestion(@PathVariable Long id) {

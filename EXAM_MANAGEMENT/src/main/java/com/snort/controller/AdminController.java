@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,15 +29,16 @@ public class AdminController {
     private OptionRepository optionRepository;
 
     @GetMapping("/index")
-    public String adminDashBoard(Model model){
-        model.addAttribute("title","Admin Dashboard");
+    public String adminDashBoard(Model model) {
+        model.addAttribute("title", "Admin Dashboard");
         return "admin/admin_home";
     }
+
     @GetMapping("/show-users")
 
-    public String showAllUsers(Model model ){
-        List<User> userList= userRepository.findAll();
-        model.addAttribute("userList",userList);
+    public String showAllUsers(Model model) {
+        List<User> userList = userRepository.findAll();
+        model.addAttribute("userList", userList);
         model.addAttribute("title", "Show User List");
         return "admin/user-list";
     }
@@ -44,33 +48,63 @@ public class AdminController {
         model.addAttribute("title", new QuestionRequest());
         return "admin/create_question";
     }
- /*   @PostMapping("/mcq/saveQuestions")
-    public Question createQuestion(@RequestBody QuestionRequest questionRequest) {
-        Question question = questionService.createQuestion(questionRequest);
-        return question;
-    }*/
+
+    /*   @PostMapping("/mcq/saveQuestions")
+       public Question createQuestion(@RequestBody QuestionRequest questionRequest) {
+           Question question = questionService.createQuestion(questionRequest);
+           return question;
+       }*/
     @PostMapping("/saveQuestion")
     public String saveQuestion(@ModelAttribute("questionRequest") QuestionRequest questionRequest) {
         Question question = questionService.createQuestion(questionRequest);
-        System.out.println("created Question: "+question);
+        System.out.println("created Question: " + question);
         return "admin/create_question";
     }
+
     @GetMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable(value = "id") int id) {
-        Optional<User>  optionalUser = this.userRepository.findById(id);
+        Optional<User> optionalUser = this.userRepository.findById(id);
         User user = optionalUser.get();
-        System.out.println("Deleted User :"+user);
+        System.out.println("Deleted User :" + user);
         this.userRepository.delete(user);
         return "redirect:admin/user-list";
     }
+
     @DeleteMapping("/{id}")
-    public String  delete(@PathVariable int id){
-       try{
-           userRepository.deleteById(id);
-           return "user id "+id+" deleted successfully";
-       }catch (Exception e){
-           return "user id "+id+" cannot deleted";
-       }
+    public String delete(@PathVariable int id) {
+        try {
+            userRepository.deleteById(id);
+            return "user id " + id + " deleted successfully";
+        } catch (Exception e) {
+            return "user id " + id + " cannot deleted";
+        }
+    }
+
+
+    @GetMapping("/search")
+    public ModelAndView searchBy(HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("admin/user-list");
+        String optionName = request.getParameter("optionName").trim();
+        String optionValue = request.getParameter("optionValue").trim();
+        List<User> userList = new ArrayList<>();
+
+        switch (optionName) {
+            case "name": {
+                userList = userRepository.findByName(optionValue);
+                System.out.println("userList : "+userList);
+            }
+            break;
+            case "email": {
+                userList = userRepository.findByEmail(optionValue);
+                System.out.println("userList : "+userList);
+
+            }
+            break;
+            default:
+                break;
+        }
+        view.addObject("userList", userList);
+        return view;
     }
 
 }

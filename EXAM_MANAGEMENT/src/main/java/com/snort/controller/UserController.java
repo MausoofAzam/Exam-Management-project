@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.nio.file.Files;
@@ -20,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -189,6 +192,7 @@ public class UserController {
         return "redirect:normal/show_contacts";
 
     }
+
     //handler for profile
     @GetMapping("/profile")
     public String yourProfile(Model model) {
@@ -198,5 +202,36 @@ public class UserController {
         return "normal/profile";
     }
 
+    @GetMapping("/search")
+    public ModelAndView searchBy(HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("normal/show_contacts");
+        String optionName = request.getParameter("optionName").trim();
+        String optionValue = request.getParameter("optionValue").trim();
+
+        List<Contact> contactList = new ArrayList<>();
+
+        switch (optionName) {
+            case "name": {
+                contactList = contactRepository.findByName(optionValue);
+                System.out.println("contactList : " + contactList);
+            }
+            break;
+            case "email": {
+                contactList = contactRepository.findByEmail(optionValue);
+                System.out.println("contactList : " + contactList);
+
+            }
+            break;
+            case "phone": {
+                contactList = contactRepository.findByPhone(optionValue);
+                System.out.println("contactList : " + contactList);
+            }
+            break;
+            default:
+                break;
+        }
+        view.addObject("contactList", contactList);
+        return view;
+    }
 
 }
