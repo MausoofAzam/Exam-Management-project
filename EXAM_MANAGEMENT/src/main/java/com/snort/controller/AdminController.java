@@ -6,6 +6,7 @@ import com.snort.entities.User;
 import com.snort.repository.OptionRepository;
 import com.snort.repository.UserRepository;
 import com.snort.service.QuestionService;
+import com.snort.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 //@RestController
@@ -27,21 +30,42 @@ public class AdminController {
     private UserRepository userRepository;
     @Autowired
     private OptionRepository optionRepository;
+    @Autowired
+    private UserService userService;
+    @ModelAttribute
+    public void addCommonData(Model model, Principal principal) {
 
+        String userName = principal.getName();
+        System.out.println("USERNAME :" + userName);
+
+        User user = userRepository.getUserByUserName(userName);
+//        System.out.println("USER :" + user);
+        model.addAttribute("user", user);
+
+    }
     @GetMapping("/index")
     public String adminDashBoard(Model model) {
         model.addAttribute("title", "Admin Dashboard");
         return "admin/admin_home";
     }
 
+    /* This handle is for fetching all users*/
     @GetMapping("/show-users")
-
     public String showAllUsers(Model model) {
         List<User> userList = userRepository.findAll();
         model.addAttribute("userList", userList);
         model.addAttribute("title", "Show User List");
         return "admin/user-list";
     }
+    /*This Handler is used for all users except users has ROLE ADMIN*/
+  /*  @GetMapping("/show-users")
+    public String showAllUsers(Model model, Principal principal) {
+        List<User> userList = userRepository.findAllByUsernameNot(principal.getName());
+        model.addAttribute("userList", userList);
+        model.addAttribute("title", "Show User List");
+        return "admin/user-list";
+    }
+*/
 
     @GetMapping("/createQuestion")
     public String showCreateQuestionForm(Model model) {
@@ -61,6 +85,7 @@ public class AdminController {
         return "admin/create_question";
     }
 
+    /*Handler for delete users*/
     @GetMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable(value = "id") int id) {
         Optional<User> optionalUser = this.userRepository.findById(id);
@@ -69,17 +94,6 @@ public class AdminController {
         this.userRepository.delete(user);
         return "redirect:admin/user-list";
     }
-
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable int id) {
-        try {
-            userRepository.deleteById(id);
-            return "user id " + id + " deleted successfully";
-        } catch (Exception e) {
-            return "user id " + id + " cannot deleted";
-        }
-    }
-
 
     @GetMapping("/search")
     public ModelAndView searchBy(HttpServletRequest request) {
@@ -91,12 +105,12 @@ public class AdminController {
         switch (optionName) {
             case "name": {
                 userList = userRepository.findByName(optionValue);
-                System.out.println("userList : "+userList);
+                System.out.println("userList : " + userList);
             }
             break;
             case "email": {
                 userList = userRepository.findByEmail(optionValue);
-                System.out.println("userList : "+userList);
+                System.out.println("userList : " + userList);
 
             }
             break;
@@ -106,5 +120,29 @@ public class AdminController {
         view.addObject("userList", userList);
         return view;
     }
+
+    /*Handler for getting exam page based on category level and set number*/
+    @GetMapping("/mcq/exam12")
+    public String startExam1(Model model) {
+        model.addAttribute("title","Assign the List of Questions Here");
+        return "admin/startExamsDemo";
+    }
+
+    @GetMapping("/mcq/examsList")
+    public String startExam(Model model, @RequestParam(required = false, name = "category") String category,
+                            @RequestParam(required = false, name = "level") String level, @RequestParam(required = false, name = "setNumber") Integer setNumber) {
+        if (category != null && level != null && setNumber != null) {
+            List<Question> questions = questionService.findQusByCategoryAndLevelAndSetNumber(category, level, setNumber);
+            model.addAttribute("title", "List of Questions");
+            System.out.println("List of Question : " + questions);
+            model.addAttribute("questions", questions);
+            model.addAttribute("totalCount", questionService.countByCategoryAndLevelAndSetNumber(category, level, setNumber));
+            model.addAttribute("totalMarks", questionService.addMarksByCategoryAndLevelAndSetNumber(category, level, setNumber));
+            return "admin/assign_exam";
+        } else {
+            return "admin/startExamsDemo";
+        }
+    }
+
 
 }
