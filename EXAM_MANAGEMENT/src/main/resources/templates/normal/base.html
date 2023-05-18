@@ -68,9 +68,9 @@
   <span onclick="toggleSidebar()" class="crossBtn">&times;</span> <a
         id="home-link" th:href="@{/user/index}" class="item">
   <i class="fa-solid fa-house-user"></i>Home</a>
+
   <a id="contact-link" th:href="@{/user/show-contacts}" class="item">
     <i class="fa-solid fa-address-book"></i> your Contacts</a>
-
 
 
   <a id="add-link" th:href="@{/user/add-contact}" class="item"><i
@@ -80,8 +80,10 @@
      th:href="@{/user/profile}" class="item"><i
           class="fa-solid fa-user"></i>Your Profile</a>
 
-  <a id="setting-link" th:href="@{/user/setting}" class="item"><i
-        class="fa-solid fa-gear"></i>Settings</a> <a th:href="@{/logout}"
+ <!-- <a id="setting-link" th:href="@{/user/setting}" class="item"><i
+        class="fa-solid fa-gear"></i>Settings</a>-->
+
+  <a th:href="@{/logout}"
                                                      class="item"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
   <div class="divider"></div>
 </div>

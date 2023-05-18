@@ -8,44 +8,16 @@
 <body>
 
 <section>
-    <h1>This is Student Home Page</h1>
-    <div class="container">
-        <div class="card">
-            <div class="card-body my-5">
-               <!-- <div class="container text-center">
-                    <img style="height: 180px; width: 180px;"
-                         class="my_profile_picture" th:src="@{'/img/cont.png'}"
-                         alt="profile_photo" />
-                </div>-->
+    <div >
+        <h3 align="center">This is Student Dashboard Page</h3>
+        <h3 align="center"> Here you can add contact you want </h3>
 
-                <h2 class="text-center mt-3">Start Adding Your Contacts</h2>
-
-                <a th:href="@{/user/add-contact}"
-                   class="btn btn-secondary btn-block text-uppercase mt">Add New
-                    Contact</a>
-                <hr/>
-                <!--<h3 class="text-center" style="color:blue">&#45;&#45;:Donate Us:&#45;&#45;</h3>
-                <input id="payment_field" type="text"  class="form-control my-3" placeholder="Enter Amount Here"/>
-
-                <div class="container text-center">
-
-                    <button onclick="paymentStart()" class="btn btn-success">PAY NOW</button>
-
-                </div>-->
-
-
-<!--            </div>-->
+        <div align="center">
+            <a id="user-link"  th:href="@{/user/add-contact}" class="item">
+                <i class="fa-solid fa-address-book"></i>Start Adding Contacts Here</a>
         </div>
 
     </div>
-
-    <script>
-		$(document).ready(()=> {
-			$(".item").removeClass("active");
-			$('#home-link').addClass('active');
-		});
-
-		</script>
 </section>
 
 </body>

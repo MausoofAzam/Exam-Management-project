@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:fragment="layout(content)">
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet"
@@ -18,90 +18,97 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" th:href="@{/css/style.css}" />
 
-  <title th:text="${title}">Base Html</title>
+    <title th:text="${title}">Base Html</title>
 
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-          integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-          crossorigin="anonymous"></script> -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script> -->
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-          integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-          crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
 
 </head>
 <body>
 <!-- This is navbar -->
 
 <nav class="fixed-top navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" th:href="@{/}"><b>EXAM MANAGEMENT
-  </b></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false"
-          aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+    <a class="navbar-brand" th:href="@{/}"><b>EXAM MANAGEMENT
+    </b></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav ml-auto text-uppercase">
-     <!-- <li class="nav-item"><a class="nav-link" th:href="@{/}">Home
-        <span class="sr-only">(current)</span>
-      </a></li>-->
-     <!-- <li class="nav-item"><a class="nav-link" th:href="@{/about/}">About</a>
-      </li>-->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-uppercase">
+            <!-- <li class="nav-item"><a class="nav-link" th:href="@{/}">Home
+               <span class="sr-only">(current)</span>
+             </a></li>-->
+            <!-- <li class="nav-item"><a class="nav-link" th:href="@{/about/}">About</a>
+             </li>-->
 
-      <li class="nav-item"><a class="nav-link"><span
-              th:text="${user.name}"></span></a></li>
+            <li class="nav-item"><a class="nav-link"><span
+                    th:text="${user.name}"></span></a></li>
 
-      <li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a>
-      </li>
-    </ul>
+            <li class="nav-item" id="profile"><a class="nav-link" th:href="@{/admin/profile}"><i
+                    class="fa-solid fa-user"></i>your Profile</a>
+            <li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a>
+            </li>
+        </ul>
 
-  </div>
+    </div>
 </nav>
 <!-- End of navbar -->
 
 
-
 <div class="sidebar mt-2">
-  <span onclick="toggleSidebar()" class="crossBtn">&times;</span> <a
+    <span onclick="toggleSidebar()" class="crossBtn">&times;</span> <a
         id="home-link" th:href="@{/admin/index}" class="item">
-  <i class="fa-solid fa-house-user"></i>Home</a>
-  <!--<a id="contact-link" th:href="@{/user/show-contacts}" class="item">
-    <i class="fa-solid fa-address-book"></i> your Contacts</a>-->
-
-<a id="user-link" th:href="@{/admin/show-users}" class="item">
-    <i class="fa-solid fa-address-book"></i>Student List</a>
+    <i class="fa-solid fa-house-user"></i>Home</a>
 
 
-  <!--<a id="add-link" th:href="@{/user/add-contact}" class="item"><i
-        class="fa-solid fa-pen"></i>Add Contact</a>-->
+    <a id="setting-link" th:href="@{/admin/createQuestion}" class="item"><i
+            class="fa-solid fa-gear"></i>Add Questions</a>
 
-<!--  <a id="profile-link" th:href="@{/user/profile}" class="item"><i-->
-  <a id="profile-link" href="#" class="item"><i
-        class="fa-solid fa-user"></i>Your Profile</a>
+    <a id="user-link" th:href="@{/admin/show-users}" class="item">
+        <i class="fa-solid fa-address-book"></i>Student List</a>
 
-  <a id="setting-link" th:href="@{/admin/createQuestion}" class="item"><i
-        class="fa-solid fa-gear"></i>Add Questions</a>
 
-  <a th:href="@{/logout}" class="item"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
-  <div class="divider"></div>
+    <a id="add-link" th:href="@{/admin/add-contact}" class="item"><i
+            class="fa-solid fa-pen"></i>Create your Contacts</a>
+
+    <a id="contact-link" th:href="@{/admin/show-contacts}" class="item">
+        <i class="fa-solid fa-address-book"></i> your Contacts</a>
+
+
+    <!--<a id="add-link" th:href="@{/user/add-contact}" class="item"><i
+          class="fa-solid fa-pen"></i>Add Contact</a>-->
+
+    <!--<a id="profile-link" th:href="@{/admin/profile}" class="item"><i
+          class="fa-solid fa-user"></i>Your Profile</a>-->
+
+
+    <a th:href="@{/logout}" class="item"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+    <div class="divider"></div>
 </div>
 <div class="content mt-5">
-  <i onclick="toggleSidebar()" class="fas fa-bars m-3"></i>
+    <i onclick="toggleSidebar()" class="fas fa-bars m-3"></i>
 
-<!--  Message Box-->
-  <div th:if="${session.message}" class="container text-center">
-    <div th:classappend="${'alert-'+session.message.type}" class="alert"
-         role="alert">
-      <span th:text="${session.message.content}"></span>
+    <!--  Message Box-->
+    <div th:if="${session.message}" class="container text-center">
+        <div th:classappend="${'alert-'+session.message.type}" class="alert"
+             role="alert">
+            <span th:text="${session.message.content}"></span>
+        </div>
+
+        <th:block th:text="${#session.removeAttribute('message')}"></th:block>
     </div>
 
-    <th:block th:text="${#session.removeAttribute('message')}"></th:block>
-  </div>
-
-  <div th:replace="${content}"></div>
+    <div th:replace="${content}"></div>
 
 
 </div>
@@ -121,7 +128,6 @@
 <!--<script>
 
 	function deleteContact(cid){
-
 		swal({
 			  title: "Are you sure?",
 			  text: "Once deleted, you will not be able to recover this contact!",

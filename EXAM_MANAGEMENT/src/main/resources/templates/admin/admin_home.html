@@ -8,9 +8,17 @@
 <body>
 
 <section>
-  <h3 align="center">This is Admin/TL Dashboard</h3>
-  <p align="center">Here Admin/ Tl can able to view the List of Student, he can able to delete the Registered Student</p>
-  <p align="center">Admin/TL can able to assign the Question to the particular Question Based on Category, Level and SetNumber</p>
+  <div >
+    <h3 align="center">This is Admin/TL Dashboard</h3>
+    <p align="center">Here Admin/ Tl can able to view the List of Student, he can able to delete the Registered Student</p>
+    <p align="center">Admin/TL can able to assign the Question to the particular Question Based on Category, Level and SetNumber</p>
+
+    <div align="center">
+      <a id="user-link"  th:href="@{/admin/show-users}" class="item">
+        <i class="fa-solid fa-address-book"></i>Start Assigning Exam to Student Here</a>
+    </div>
+
+  </div>
 </section>
 
 </body>

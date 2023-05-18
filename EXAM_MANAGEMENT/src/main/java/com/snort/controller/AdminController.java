@@ -1,19 +1,29 @@
 package com.snort.controller;
 
 import com.snort.dto.QuestionRequest;
+import com.snort.entities.Contact;
 import com.snort.entities.Question;
 import com.snort.entities.User;
+import com.snort.repository.ContactRepository;
 import com.snort.repository.OptionRepository;
 import com.snort.repository.UserRepository;
 import com.snort.service.QuestionService;
 import com.snort.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +42,8 @@ public class AdminController {
     private OptionRepository optionRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ContactRepository contactRepository;
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
 
@@ -66,6 +78,71 @@ public class AdminController {
         return "admin/user-list";
     }
 */
+    @GetMapping("/add-contact")
+    public String openAddContactForm(Model model) {
+
+        model.addAttribute("title", "Add Contact");
+        model.addAttribute("contact", new Contact());
+        return "admin/add_contact_form";
+    }
+    @PostMapping("/process-contact")
+    public String processContact(@ModelAttribute Contact contact, @RequestParam("profileImage") MultipartFile file,
+                                 Principal principal, HttpSession session) {
+        try {
+            String name = principal.getName();
+            User user = this.userRepository.getUserByUserName(name);
+
+            if (file.isEmpty()) {
+                System.out.println("File is Empty");
+//                contact.setImage("contact1.png");
+
+            } else {
+                contact.setImage(file.getOriginalFilename());
+
+                File saveFile = new ClassPathResource("static/image").getFile();
+
+                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
+
+                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+                System.out.println("Image is Uploaded");
+            }
+
+            contact.setUser(user);
+
+            user.getContacts().add(contact);
+            this.userRepository.save(user);
+
+            System.out.println("Contact :" + contact);
+
+            System.out.println("Added to Database");
+
+//            session.setAttribute("message", new Message("Your Contact Is Added !! Add More", "success"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+//            session.setAttribute("message", new Message("Something Went Wrong !! Try Again", "danger"));
+        }
+        return "admin/add_contact_form";
+    }
+    @GetMapping("/show-contacts")
+    public String showContact(Model model, Principal principal) {
+        model.addAttribute("title", "Show User Contacts");
+        String userName = principal.getName();
+        User user = this.userRepository.getUserByUserName(userName);
+        List<Contact> contacts = this.contactRepository.findContactByUser(user.getId());
+        model.addAttribute("contacts", contacts);
+        return "admin/show_contacts";
+    }
+
+    @GetMapping("/profile")
+    public String yourProfile(Model model) {
+
+        model.addAttribute("title", "Profile");
+
+        return "admin/profile";
+    }
 
     @GetMapping("/createQuestion")
     public String showCreateQuestionForm(Model model) {
