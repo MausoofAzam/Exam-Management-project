@@ -1,13 +1,19 @@
 package com.snort.controller;
 
 import com.snort.entities.Contact;
+import com.snort.entities.Question;
 import com.snort.entities.User;
 import com.snort.helper.Message;
 import com.snort.repository.ContactRepository;
+import com.snort.repository.UserQuestionRepository;
 import com.snort.repository.UserRepository;
+import com.snort.service.UserQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +39,8 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private ContactRepository contactRepository;
+    @Autowired
+    private UserQuestionService userQuestionService;
 
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
@@ -233,5 +241,22 @@ public class UserController {
         view.addObject("contactList", contactList);
         return view;
     }
+    @GetMapping("/start")
+    public String examPage(Model model){
+        model.addAttribute("title","exam section");
+        return "normal/assigned_question";
+    }
+    @GetMapping("/assigned-question")
+    public String getAssignedQuestion(@RequestParam int userId,
+                                      @RequestParam(defaultValue = "0") int pageNumber,
+                                      Model model) {
+        Pageable pageable = PageRequest.of(pageNumber, 1);
+        Page<Question> questionPage = userQuestionService.getAssignedQuestion(userId, pageable);
+        model.addAttribute("question", questionPage.getContent().get(0));
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("totalPages", questionPage.getTotalPages());
+        return "normal/exam_questions";
+    }
+
 
 }
