@@ -8,9 +8,11 @@ import com.snort.repository.ContactRepository;
 import com.snort.repository.OptionRepository;
 import com.snort.repository.UserRepository;
 import com.snort.service.QuestionService;
+import com.snort.service.UserQuestionService;
 import com.snort.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +46,9 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private ContactRepository contactRepository;
+
+    @Autowired
+    private UserQuestionService userQuestionService;
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
 
@@ -219,6 +224,29 @@ public class AdminController {
         } else {
             return "admin/startExamsDemo";
         }
+    }
+
+
+ /*   @PostMapping("/assign/{userId}/{category}/{level}/{setNumber}")
+    public ResponseEntity<?> assignQuestionsToUser(@PathVariable Long userId,
+                                                   @PathVariable String category,
+                                                   @PathVariable String level,
+                                                   @PathVariable Integer setNumber) {
+        userQuestionService.assignQuestionsToUser(userId, category, level, setNumber);
+        return ResponseEntity.ok().build();
+    }*/
+
+    @PostMapping("/assign-question")
+    public String  assignQuestionsToUser(@RequestParam int userId,
+                                                   @RequestParam String category,
+                                                   @RequestParam String level,
+                                                   @RequestParam Integer setNumber) {
+        System.out.println("userId :"+userId);
+        System.out.println("category : "+category);
+        System.out.println("level : "+level);
+        System.out.println("setNumber : "+setNumber);
+        userQuestionService.assignQuestionsToUser(userId, category, level, setNumber);
+        return "admin/user-list";
     }
 
 

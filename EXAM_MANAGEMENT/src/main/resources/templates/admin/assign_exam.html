@@ -58,7 +58,8 @@
   </table>
 
   <div class="text-center">
-    <form action="/assign-question" method="post">
+    <form action="/admin/assign-question" method="post">
+      <input type="hidden" name="userId" th:value="${user.id}">
       <input type="hidden" name="category" th:value="${category}">
       <input type="hidden" name="level" th:value="${level}">
       <input type="hidden" name="setNumber" th:value="${setNumber}">

@@ -12,28 +12,16 @@
   <div class="card-body">
   <h1 class="text-center"> Your Contacts</h1>
 
-    <form action="/user/search">
-      <div>
-				<span style="display:inline-block">
-				<div class="container my-1">
-					Search Here: <input type="text" name="optionValue"
-                                        placeholder="Enter name or Email or Phone"
-                                        size="50" required/>
-					&nbsp;
+    <!--Search functionality-->
+    <div class="search-container my-4">
 
-				</span>
-        <span class= "d-inline-block">
-        <div style="display:inline-block" class="form-group d-inline-block">
-          <select name="optionName" class="form-control d-inline-block">
-            <option value="name">Name</option>
-            <option value="email">by Email</option>
-            <option value="phone">by Phone</option>
-          </select>
-        </div>
-        </span>
-        <span class="d-inline-block">
-					<button class="btn btn-sm btn-primary col-12" type="submit"><i class="fa-sharp fa-solid fa-magnifying-glass"></i>Search</button>
-				</span>
+    <input onkeyup="search()" id="search-input" type="text" class="form-control" placeholder="Search your contacts">
+      <div class="search-result"></div>
+      <h2>This is search result</h2>
+      <!--Result goes here-->
+    </div>
+
+
         <table class="table">
           <thead>
           <tr>

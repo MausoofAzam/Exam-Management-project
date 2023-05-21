@@ -1,5 +1,6 @@
 package com.snort.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,5 +26,6 @@ public class Contact {
     @Column(length = 1000)
     private String description;
     @ManyToOne
+    @JsonIgnore
     private User user;
 }
