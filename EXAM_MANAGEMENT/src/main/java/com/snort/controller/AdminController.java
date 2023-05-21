@@ -204,32 +204,39 @@ public class AdminController {
     }
 
     /*Handler for getting exam page based on category level and set number*/
-    @GetMapping("/mcq/exam12")
-    public String startExam1(Model model) {
-        model.addAttribute("title","Assign the List of Questions Here");
+    @GetMapping("/mcq/exam12/{userId}")
+    public String startExam1(@PathVariable Long userId, Model model) {
+        model.addAttribute("title", "Assign the List of Questions Here");
+        model.addAttribute("userId", userId);
         return "admin/startExamsDemo";
     }
 
+
     @GetMapping("/mcq/examsList")
-    public String startExam(Model model, @RequestParam(required = false, name = "category") String category,
-                            @RequestParam(required = false, name = "level") String level, @RequestParam(required = false, name = "setNumber") Integer setNumber) {
+    public String startExam(Model model,
+                            @RequestParam(required = false, name = "category") String category,
+                            @RequestParam(required = false, name = "level") String level,
+                            @RequestParam(required = false, name = "setNumber") Integer setNumber,
+                            @RequestParam(required = false, name = "userId") Integer userId) {
         if (category != null && level != null && setNumber != null) {
             List<Question> questions = questionService.findQusByCategoryAndLevelAndSetNumber(category, level, setNumber);
             model.addAttribute("title", "List of Questions");
-            System.out.println("List of Question : " + questions);
+            System.out.println("List of Questions: " + questions);
             model.addAttribute("category", category);
             model.addAttribute("level", level);
             model.addAttribute("setNumber", setNumber);
+            model.addAttribute("userId", userId);
             model.addAttribute("questions", questions);
             model.addAttribute("totalCount", questionService.countByCategoryAndLevelAndSetNumber(category, level, setNumber));
             model.addAttribute("totalMarks", questionService.addMarksByCategoryAndLevelAndSetNumber(category, level, setNumber));
-            System.out.println("question assigned");
+            System.out.println("Questions assigned");
             return "admin/assign_exam";
         } else {
             return "admin/startExamsDemo";
         }
     }
 
+    /*this is rest Api to check from postman*/
 
  /*   @PostMapping("/assign/{userId}/{category}/{level}/{setNumber}")
     public ResponseEntity<?> assignQuestionsToUser(@PathVariable Long userId,
@@ -250,7 +257,7 @@ public class AdminController {
         System.out.println("level : "+level);
         System.out.println("setNumber : "+setNumber);
         userQuestionService.assignQuestionsToUser(userId, category, level, setNumber);
-        return "admin/user-list";
+        return "admin/assigned_success";
     }
 
 

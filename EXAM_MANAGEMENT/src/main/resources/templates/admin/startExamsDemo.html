@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="admin/base::layout(~{::section})">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/base::layout(~{::section})">
 <head>
     <meta charset="ISO-8859-1">
     <title th:text="${title}"></title>
 </head>
 <body>
 <section>
-    <h1>this page is for assigning question to student</h1>
+    <h1>This page is for assigning questions to students</h1>
     <h1>Start Exam</h1>
-<!--    <form action="#" th:action="@{/admin/mcq/exam}" method="get">-->
-        <form action="#" th:action="@{/admin/mcq/examsList}" method="get">
+    <form action="#" th:action="@{/admin/mcq/examsList}" method="get">
         <div class="input-group">
             <label for="Category">Category:</label>
             <select id="Category" name="category">
@@ -36,11 +34,9 @@
                 <option value="4">Set D</option>
             </select>
         </div>
+        <input type="hidden" name="userId" th:value="${userId}" />
         <button type="submit">View Question</button>
     </form>
-
 </section>
-
 </body>
-
 </html>
