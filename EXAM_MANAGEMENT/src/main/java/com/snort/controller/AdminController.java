@@ -217,9 +217,13 @@ public class AdminController {
             List<Question> questions = questionService.findQusByCategoryAndLevelAndSetNumber(category, level, setNumber);
             model.addAttribute("title", "List of Questions");
             System.out.println("List of Question : " + questions);
+            model.addAttribute("category", category);
+            model.addAttribute("level", level);
+            model.addAttribute("setNumber", setNumber);
             model.addAttribute("questions", questions);
             model.addAttribute("totalCount", questionService.countByCategoryAndLevelAndSetNumber(category, level, setNumber));
             model.addAttribute("totalMarks", questionService.addMarksByCategoryAndLevelAndSetNumber(category, level, setNumber));
+            System.out.println("question assigned");
             return "admin/assign_exam";
         } else {
             return "admin/startExamsDemo";
