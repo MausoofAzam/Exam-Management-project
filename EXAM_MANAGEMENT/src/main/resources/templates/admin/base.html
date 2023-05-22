@@ -34,7 +34,7 @@
 <!-- This is navbar -->
 
 <nav class="fixed-top navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" th:href="@{/}"><b>EXAM MANAGEMENT
+    <a class="navbar-brand" href="#"><b>EXAM MANAGEMENT
     </b></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -52,7 +52,7 @@
              </li>-->
             <li class="nav-item">
                 <a class="nav-link">
-                    <span th:text="'Welcome Admin/TL, ' + ${user.name}"></span>
+                    <span th:text="'Hii Admin/TL, ' + ${user.name}"></span>
                 </a>
             </li>
 
@@ -71,21 +71,21 @@
 <div class="sidebar mt-2">
     <span onclick="toggleSidebar()" class="crossBtn">&times;</span> <a
         id="home-link" th:href="@{/admin/index}" class="item">
-    <i class="fa-solid fa-house-user"></i>Home</a>
+    <i class="fa-solid fa-house-user"></i>Admin Home</a>
 
 
     <a id="setting-link" th:href="@{/admin/createQuestion}" class="item"><i
-            class="fa-solid fa-gear"></i>Add Questions</a>
+            class="fa-solid fa-gear"></i>Post Question Here</a>
 
     <a id="user-link" th:href="@{/admin/show-users}" class="item">
-        <i class="fa-solid fa-address-book"></i>Student List</a>
+        <i class="fa-solid fa-address-book"></i>List Of Candidate</a>
 
 
     <a id="add-link" th:href="@{/admin/add-contact}" class="item"><i
             class="fa-solid fa-pen"></i>Create your Contacts</a>
 
     <a id="contact-link" th:href="@{/admin/show-contacts}" class="item">
-        <i class="fa-solid fa-address-book"></i> your Contacts</a>
+        <i class="fa-solid fa-address-book"></i> Admin Contacts</a>
 
 
     <!--<a id="add-link" th:href="@{/user/add-contact}" class="item"><i

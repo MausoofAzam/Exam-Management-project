@@ -7,6 +7,7 @@ import com.snort.helper.Message;
 import com.snort.repository.ContactRepository;
 import com.snort.repository.UserQuestionRepository;
 import com.snort.repository.UserRepository;
+import com.snort.service.QuestionService;
 import com.snort.service.UserQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
@@ -41,6 +42,8 @@ public class UserController {
     private ContactRepository contactRepository;
     @Autowired
     private UserQuestionService userQuestionService;
+    @Autowired
+    private QuestionService questionService;
 
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
@@ -254,12 +257,15 @@ public class UserController {
 
     @GetMapping("/assigned-question")
     public String getAssignedQuestion(Principal principal,
+                                      @RequestParam(required = false, name = "category") String category,
+                                      @RequestParam(required = false, name = "level") String level,
+                                      @RequestParam(required = false, name = "setNumber") Integer setNumber,
                                       @RequestParam(defaultValue = "0") int pageNumber,
                                       Model model) {
-        String email = principal.getName(); // Get the email from the Principal object
-        User user = userRepository.findByEmail(email); // Retrieve the User by email
+        String email = principal.getName();
+        User user = userRepository.findByEmail(email);
 
-        int userId = user.getId(); // Extract the userId from the User object
+        int userId = user.getId();
 
         Pageable pageable = PageRequest.of(pageNumber, 1);
         Page<Question> questionPage = userQuestionService.getAssignedQuestion(userId, pageable);
@@ -267,6 +273,8 @@ public class UserController {
         model.addAttribute("questions", questionPage);
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("totalPages", questionPage.getTotalPages());
+        model.addAttribute("totalCount", questionService.countByCategoryAndLevelAndSetNumber(category, level, setNumber));
+        model.addAttribute("totalMarks", questionService.addMarksByCategoryAndLevelAndSetNumber(category, level, setNumber));
 
         return "normal/exam_questions";
     }

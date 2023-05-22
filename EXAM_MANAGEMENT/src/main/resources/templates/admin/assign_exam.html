@@ -8,13 +8,13 @@
 <body>
 
 <section>
-  <h2>Question to be Assigned</h2>
+  <h3>Based on selection Here are the List of Questions</h3>
   <div class="selected-info">
     <h5>Category: <span th:text="${category}"></span></h5>
     <h5>Level: <span th:text="${level}"></span></h5>
     <h5>Set Number: <span th:text="${setNumber}"></span></h5>
   </div>
-  <h1>Questions</h1>
+<!--  <h1>Questions</h1>-->
   <h>total Marks <div th:text="${totalMarks}"></div></h>
   <br>
   <h>total Question <div th:text="${totalCount}"></div></h>
@@ -59,7 +59,7 @@
 
   <div class="text-center">
     <form action="/admin/assign-question" method="post">
-      <input type="text" name="userId" th:value="${userId}">
+      <input type="hidden" name="userId" th:value="${userId}">
       <input type="hidden" name="category" th:value="${category}">
       <input type="hidden" name="level" th:value="${level}">
       <input type="hidden" name="setNumber" th:value="${setNumber}">

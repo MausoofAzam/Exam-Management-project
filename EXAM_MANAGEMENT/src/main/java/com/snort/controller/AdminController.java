@@ -140,7 +140,7 @@ public class AdminController {
         model.addAttribute("contacts", contacts);
         return "admin/show_contacts";
     }
-
+/*Handler for */
     @GetMapping("/profile")
     public String yourProfile(Model model) {
 
@@ -148,7 +148,7 @@ public class AdminController {
 
         return "admin/profile";
     }
-
+/*handler for opening create_question page*/
     @GetMapping("/createQuestion")
     public String showCreateQuestionForm(Model model) {
         model.addAttribute("title", new QuestionRequest());
@@ -160,6 +160,7 @@ public class AdminController {
            Question question = questionService.createQuestion(questionRequest);
            return question;
        }*/
+    /*Handler for saving question*/
     @PostMapping("/saveQuestion")
     public String saveQuestion(@ModelAttribute("questionRequest") QuestionRequest questionRequest) {
         Question question = questionService.createQuestion(questionRequest);
@@ -176,7 +177,7 @@ public class AdminController {
         this.userRepository.delete(user);
         return "redirect:admin/user-list";
     }
-
+/*Handler for Search */
     @GetMapping("/search")
     public ModelAndView searchBy(HttpServletRequest request) {
         ModelAndView view = new ModelAndView("admin/user-list");
