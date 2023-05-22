@@ -5,67 +5,6 @@
   <meta charset="ISO-8859-1">
   <title th:text="${title}">Add Contact</title>
 </head>
-<!--  <style>-->
- <!--@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-
-body {
- font-family: 'Open Sans', sans-serif;
- background-color: #f4f4f4;
-}
-
-.container {
- width: 80%;
- margin: auto;
- overflow: hidden;
-}
-
-.selected-info {
- padding: 20px;
- background-color: #4CAF50;
- color: #fff;
- display: flex; /* added */
- justify-content: space-between; /* added */
-}
-
-.selected-info h5 { /* added */
- margin: 0;
-}
-
-.question {
- font-family: 'Open Sans', sans-serif;
- font-size: 20px;
- color: #333;
- font-weight: bold;
- text-align: center;
- display: flex;
- flex-direction: column;
- align-items: flex-start;
-}
-
-.option {
- font-family: 'Open Sans', sans-serif;
- font-size: 18px;
- color: #555;
- margin-bottom: 10px; /* added */
-}
-
-.option input[type="radio"] { /* added */
- margin-right: 5px; /* added */
-}
-
-.navigation {
- display: flex;
- justify-content: space-between;
- margin-top: 20px;
-}
-
-.header {
- text-align: center;
- margin-top: 20px;
-}
--->
-<!-- </style>-->
-<!--</head>-->
 <body>
 <section>
   <div class="container">
@@ -104,7 +43,7 @@ body {
   <!-- display buttons based on the question's position -->
   <div class="navigation">
     <!-- Cancel button -->
-    <!--  <button onclick="window.location.href='cancel.html'">Cancel</button>-->
+    <!-- <button onclick="window.location.href='cancel.html'">Cancel</button>-->
 
     <!-- Previous button -->
     <div class="previous" th:if="${questions.hasPrevious()}">
@@ -116,18 +55,12 @@ body {
       <a th:href="@{/mcq/exam(category=${category}, level=${level}, setNumber=${setNumber}, page=${questions.number + 1})}">Next</a>
     </div>
 
-
     <!-- Submit button -->
     <div class="submit" th:if="${questions.last}">
       <a href="/mcq/result">Submit</a>
     </div>
 
   </div>
-  <!--  <form th:action="@{/mcq/result}">-->
-  <!--    <button type="submit" th:name="action" th:value="in">Submit Exam</button>-->
-  <!--    <button type="submit" th:name="action" th:value="out">check-out</button>-->
-  <!--  </form>-->
-
 
   <!-- display page number in the header -->
   <div class="header">

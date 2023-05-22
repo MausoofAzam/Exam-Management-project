@@ -1,23 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="normal/base::layout(~{::section})">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="normal/base::layout(~{::section})">
 <head>
   <meta charset="ISO-8859-1">
-  <title th:text="${title}">Add Contact</title>
+  <title th:text="${title}">Exam Section</title>
 </head>
 <body>
 <section>
-
-  <div >
-    <h2> This page is for assigned question to particular student</h2>
-<!--    <h3 align="center">This is Student Dashboard Page</h3>-->
-<!--    <h3 align="center"> Here you can add contact you want </h3>-->
-
+  <div>
+    <h2 align="center">This page is for assigned questions to a particular student</h2>
     <div align="center">
-      <a id="user-link"  th:href="@{/user/assigned-question}" class="item">
-        <i class="fa-solid fa-address-book"></i>Start Exam</a>
+      <a id="user-link" th:href="@{/user/assigned-question(userId=${userId})}" class="item">Start Exam</a>
     </div>
-
   </div>
 </section>
 </body>

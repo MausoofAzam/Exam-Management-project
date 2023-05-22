@@ -242,21 +242,36 @@ public class UserController {
         return view;
     }
     @GetMapping("/start")
-    public String examPage(Model model){
-        model.addAttribute("title","exam section");
+    public String examPage(Model model, Principal principal) {
+        // Get the email from the Principal object
+        String email = principal.getName();
+
+        model.addAttribute("title", "exam section");
+        model.addAttribute("email", email); // Add the email to the model
+
         return "normal/assigned_question";
     }
+
     @GetMapping("/assigned-question")
-    public String getAssignedQuestion(@RequestParam int userId,
+    public String getAssignedQuestion(Principal principal,
                                       @RequestParam(defaultValue = "0") int pageNumber,
                                       Model model) {
+        String email = principal.getName(); // Get the email from the Principal object
+        User user = userRepository.findByEmail(email); // Retrieve the User by email
+
+        int userId = user.getId(); // Extract the userId from the User object
+
         Pageable pageable = PageRequest.of(pageNumber, 1);
         Page<Question> questionPage = userQuestionService.getAssignedQuestion(userId, pageable);
-        model.addAttribute("question", questionPage.getContent().get(0));
+        model.addAttribute("userId", userId);
+        model.addAttribute("questions", questionPage);
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("totalPages", questionPage.getTotalPages());
+
         return "normal/exam_questions";
     }
+
+
 
 
 }

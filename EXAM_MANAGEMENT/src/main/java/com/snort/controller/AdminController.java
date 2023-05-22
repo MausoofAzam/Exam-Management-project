@@ -191,7 +191,7 @@ public class AdminController {
             }
             break;
             case "email": {
-                userList = userRepository.findByEmail(optionValue);
+//                userList = userRepository.findByEmail(optionValue);
                 System.out.println("userList : " + userList);
 
             }
