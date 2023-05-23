@@ -4,6 +4,35 @@
 <head>
   <meta charset="ISO-8859-1">
   <title th:text="${title}">Add Contact</title>
+<!--  <style>-->
+<!--    body {-->
+<!--        font-family: Arial, sans-serif;-->
+<!--    }-->
+<!--    .container {-->
+<!--        max-width: 800px;-->
+<!--        margin: 0 auto;-->
+<!--    }-->
+<!--    .selected-info {-->
+<!--        margin-bottom: 20px;-->
+<!--    }-->
+<!--    .question {-->
+<!--        margin-bottom: 20px;-->
+<!--    }-->
+<!--    .option {-->
+<!--        margin-bottom: 10px;-->
+<!--    }-->
+<!--    button[type="submit"] {-->
+<!--        background-color: #4CAF50;-->
+<!--        color: white;-->
+<!--        padding: 12px 20px;-->
+<!--        border: none;-->
+<!--        border-radius: 4px;-->
+<!--        cursor: pointer;-->
+<!--    }-->
+<!--    button[type="submit"]:hover {-->
+<!--        background-color: #45a049;-->
+<!--    }-->
+<!-- </style>-->
 </head>
 <body>
 <section>
@@ -11,62 +40,49 @@
     <!-- display the selected category, level, and setNumber -->
     <div class="selected-info">
       <h5 >UserId: <span th:text="${userId}"></span></h5>
-      <h5 >Page Number: <span th:text="${pageNumber}"></span></h5>
-      <h5 >Total Pages: <span th:text="${totalPages}"></span></h5>
-    </div>
-  </div>
-
-
-  <!-- display the current question -->
-  <div class="question" th:each="question, questionIndex : ${questions.content}">
-    <h3 th:text="${question.questionType}"></h3>
-    <form>
-      <div class="option">
-        <input type="radio" th:id="${'option1-' + question.id}" th:name="${'question-' + question.id}" th:value="${question.options.option1}">
-        <label th:for="${'option1-' + question.id}" th:text="${question.options.option1}"></label>
-      </div>
-      <div class="option">
-        <input type="radio" th:id="${'option2-' + question.id}" th:name="${'question-' + question.id}" th:value="${question.options.option2}">
-        <label th:for="${'option2-' + question.id}" th:text="${question.options.option2}"></label>
-      </div>
-      <div class="option">
-        <input type="radio" th:id="${'option3-' + question.id}" th:name="${'question-' + question.id}" th:value="${question.options.option3}">
-        <label th:for="${'option3-' + question.id}" th:text="${question.options.option3}"></label>
-      </div>
-      <div class="option">
-        <input type="radio" th:id="${'option4-' + question.id}" th:name="${'question-' + question.id}" th:value="${question.options.option4}">
-        <label th:for="${'option4-' + question.id}" th:text="${question.options.option4}"></label>
-      </div>
-    </form>
-  </div>
-
-  <!-- display buttons based on the question's position -->
-  <div class="navigation">
-    <!-- Cancel button -->
-    <!-- <button onclick="window.location.href='cancel.html'">Cancel</button>-->
-
-     Previous button
-    <div class="previous" th:if="${questions.hasPrevious()}">
-      <a th:href="@{/user/assigned-question(userId=${userId},pageNumber=${pageNumber}, totalPages=${totalPages}, page=${pageNumber - 1})}" th:if="${pageNumber > 0}">Previous</a>
+      <h5>Page <span th:text="${pageNumber}"></span> of <span th:text="${totalPages}"></span></h5>
     </div>
 
-     Next button
-    <div class="next" th:if="${questions.hasNext()}">
-      <a th:href="@{/user/assigned-question(userId=${userId},pageNumber=${pageNumber}, totalPages=${totalPages}, page=${pageNumber + 1})}" th:if="${pageNumber + 1 < totalPages}">Next</a>
-    </div>-->
-   <!-- <div>
-      <a th:href="@{/user/assigned-question(userId=${userId}, pageNumber=${pageNumber}, totalPages=${totalPages}, page=${pageNumber - 1})}" th:if="${pageNumber > 0}">Previous</a>
-      <a th:href="@{/user/assigned-question(userId=${userId},  pageNumber=${pageNumber}, totalPages=${totalPages}, page=${pageNumber + 1})}" th:if="${pageNumber + 1 < totalPages}">Next</a>
-    </div>-->
-   <!-- <div>
-      <a th:href="@{/user/assigned-question(userId=${userId}, category=${category}, level=${level}, setNumber=${setNumber}, page=${pageNumber - 1})}" th:if="${pageNumber > 0}">Previous</a>
-      <a th:href="@{/user/assigned-question(userId=${userId}, category=${category}, level=${level}, setNumber=${setNumber}, page=${pageNumber + 1})}" th:if="${pageNumber + 1 < totalPages}">Next</a>
-    </div>-->
 
-    <!-- Submit button -->
-    <div class="submit" th:if="${questions.last}">
-      <a href="/mcq/result">Submit</a>
+    <!-- display the current question -->
+    <div class="question" th:each="question, questionIndex : ${questions.content}">
+      <h3><span th:text="${(pageNumber - 1) * questions.size + questionIndex.index + 1}"></span>. <span th:text="${question.questionType}"></span></h3>
+      <form>
+        <div class="option">
+          <input type="radio" th:id="${'option1-' + question.id}" th:name="${'question-' + question.id}" th:value="${question.options.option1}">
+          <label th:for="${'option1-' + question.id}" th:text="${question.options.option1}"></label>
+        </div>
+        <div class="option">
+          <input type="radio" th:id="${'option2-' + question.id}" th:name="${'question-' + question.id}" th:value="${question.options.option2}">
+          <label th:for="${'option2-' + question.id}" th:text="${question.options.option2}"></label>
+        </div>
+        <div class="option">
+          <input type="radio" th:id="${'option3-' + question.id}" th:name="${'question-' + question.id}" th:value="${question.options.option3}">
+          <label th:for="${'option3-' + question.id}" th:text="${question.options.option3}"></label>
+        </div>
+        <div class="option">
+          <input type="radio" th:id="${'option4-' + question.id}" th:name="${'question-' + question.id}" th:value="${question.options.option4}">
+          <label th:for="${'option4-' + question.id}" th:text="${question.options.option4}"></label>
+        </div>
+      </form>
     </div>
+
+    <div>
+      <div th:if="${pageNumber > 1}">
+        <a th:href="@{/user/assigned-question(pageNumber=${pageNumber - 1})}">Previous</a>
+      </div>
+
+      <div th:if="${pageNumber < totalPages}">
+        <a th:href="@{/user/assigned-question(pageNumber=${pageNumber + 1})}">Next</a>
+      </div>
+
+      <div th:if="${pageNumber == totalPages}">
+        <button type="submit">Submit</button>
+      </div>
+    </div>
+
+
+
 
   </div>
 
