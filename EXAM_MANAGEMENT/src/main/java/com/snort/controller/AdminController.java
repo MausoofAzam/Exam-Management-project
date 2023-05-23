@@ -49,6 +49,7 @@ public class AdminController {
 
     @Autowired
     private UserQuestionService userQuestionService;
+
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
 
@@ -56,10 +57,11 @@ public class AdminController {
         System.out.println("USERNAME :" + userName);
 
         User user = userRepository.getUserByUserName(userName);
-//        System.out.println("USER :" + user);
+        System.out.println("USER :" + user);
         model.addAttribute("user", user);
 
     }
+
     @GetMapping("/index")
     public String adminDashBoard(Model model) {
         model.addAttribute("title", "Admin Dashboard");
@@ -67,22 +69,23 @@ public class AdminController {
     }
 
     /* This handle is for fetching all users*/
-    @GetMapping("/show-users")
+  /*  @GetMapping("/show-users")
     public String showAllUsers(Model model) {
         List<User> userList = userRepository.findAll();
         model.addAttribute("userList", userList);
         model.addAttribute("title", "Show User List");
         return "admin/user-list";
-    }
+    }*/
     /*This Handler is used for all users except users has ROLE ADMIN*/
-  /*  @GetMapping("/show-users")
-    public String showAllUsers(Model model, Principal principal) {
-        List<User> userList = userRepository.findAllByUsernameNot(principal.getName());
-        model.addAttribute("userList", userList);
+    @GetMapping("/show-users")
+    public String showAllUsers(Model model) {
+        List<User> userList = userRepository.findAll();
+        List<User> nonAdminUser = userList.stream().filter(user -> !user.getRole().equals("ROLE_ADMIN")).collect(Collectors.toList());
+        model.addAttribute("userList", nonAdminUser);
         model.addAttribute("title", "Show User List");
         return "admin/user-list";
     }
-*/
+
     @GetMapping("/add-contact")
     public String openAddContactForm(Model model) {
 
@@ -90,6 +93,7 @@ public class AdminController {
         model.addAttribute("contact", new Contact());
         return "admin/add_contact_form";
     }
+
     @PostMapping("/process-contact")
     public String processContact(@ModelAttribute Contact contact, @RequestParam("profileImage") MultipartFile file,
                                  Principal principal, HttpSession session) {
@@ -131,6 +135,7 @@ public class AdminController {
         }
         return "admin/add_contact_form";
     }
+
     @GetMapping("/show-contacts")
     public String showContact(Model model, Principal principal) {
         model.addAttribute("title", "Show User Contacts");
@@ -140,7 +145,8 @@ public class AdminController {
         model.addAttribute("contacts", contacts);
         return "admin/show_contacts";
     }
-/*Handler for */
+
+    /*Handler for */
     @GetMapping("/profile")
     public String yourProfile(Model model) {
 
@@ -148,7 +154,8 @@ public class AdminController {
 
         return "admin/profile";
     }
-/*handler for opening create_question page*/
+
+    /*handler for opening create_question page*/
     @GetMapping("/createQuestion")
     public String showCreateQuestionForm(Model model) {
         model.addAttribute("title", new QuestionRequest());
@@ -177,7 +184,8 @@ public class AdminController {
         this.userRepository.delete(user);
         return "redirect:admin/user-list";
     }
-/*Handler for Search */
+
+    /*Handler for Search */
     @GetMapping("/search")
     public ModelAndView searchBy(HttpServletRequest request) {
         ModelAndView view = new ModelAndView("admin/user-list");
@@ -212,7 +220,7 @@ public class AdminController {
         return "admin/startExamsDemo";
     }
 
-
+/*Handler for Showing the List of Question to the Admin/TL based on Category,Level and description*/
     @GetMapping("/mcq/examsList")
     public String startExam(Model model,
                             @RequestParam(required = false, name = "category") String category,
@@ -247,16 +255,16 @@ public class AdminController {
         userQuestionService.assignQuestionsToUser(userId, category, level, setNumber);
         return ResponseEntity.ok().build();
     }*/
-
+/*This assignQuestionsToUser handler is used to assign the Question to the particular user*/
     @PostMapping("/assign-question")
-    public String  assignQuestionsToUser(@RequestParam int userId,
-                                                   @RequestParam String category,
-                                                   @RequestParam String level,
-                                                   @RequestParam Integer setNumber) {
-        System.out.println("userId :"+userId);
-        System.out.println("category : "+category);
-        System.out.println("level : "+level);
-        System.out.println("setNumber : "+setNumber);
+    public String assignQuestionsToUser(@RequestParam int userId,
+                                        @RequestParam String category,
+                                        @RequestParam String level,
+                                        @RequestParam Integer setNumber) {
+        System.out.println("userId :" + userId);
+        System.out.println("category : " + category);
+        System.out.println("level : " + level);
+        System.out.println("setNumber : " + setNumber);
         userQuestionService.assignQuestionsToUser(userId, category, level, setNumber);
         return "admin/assigned_success";
     }

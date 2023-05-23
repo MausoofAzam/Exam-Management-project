@@ -10,9 +10,9 @@
   <div class="container">
     <!-- display the selected category, level, and setNumber -->
     <div class="selected-info">
-      <h5>Category: <span th:text="${category}"></span></h5>
-      <h5>Level: <span th:text="${level}"></span></h5>
-      <h5>Set Number: <span th:text="${setNumber}"></span></h5>
+      <h5 >UserId: <span th:text="${userId}"></span></h5>
+      <h5 >Page Number: <span th:text="${pageNumber}"></span></h5>
+      <h5 >Total Pages: <span th:text="${totalPages}"></span></h5>
     </div>
   </div>
 
@@ -45,15 +45,23 @@
     <!-- Cancel button -->
     <!-- <button onclick="window.location.href='cancel.html'">Cancel</button>-->
 
-    <!-- Previous button -->
+     Previous button
     <div class="previous" th:if="${questions.hasPrevious()}">
-      <a th:href="@{/mcq/exam(category=${category}, level=${level}, setNumber=${setNumber}, page=${questions.number - 1})}">Previous</a>
+      <a th:href="@{/user/assigned-question(userId=${userId},pageNumber=${pageNumber}, totalPages=${totalPages}, page=${pageNumber - 1})}" th:if="${pageNumber > 0}">Previous</a>
     </div>
 
-    <!-- Next button -->
+     Next button
     <div class="next" th:if="${questions.hasNext()}">
-      <a th:href="@{/mcq/exam(category=${category}, level=${level}, setNumber=${setNumber}, page=${questions.number + 1})}">Next</a>
-    </div>
+      <a th:href="@{/user/assigned-question(userId=${userId},pageNumber=${pageNumber}, totalPages=${totalPages}, page=${pageNumber + 1})}" th:if="${pageNumber + 1 < totalPages}">Next</a>
+    </div>-->
+   <!-- <div>
+      <a th:href="@{/user/assigned-question(userId=${userId}, pageNumber=${pageNumber}, totalPages=${totalPages}, page=${pageNumber - 1})}" th:if="${pageNumber > 0}">Previous</a>
+      <a th:href="@{/user/assigned-question(userId=${userId},  pageNumber=${pageNumber}, totalPages=${totalPages}, page=${pageNumber + 1})}" th:if="${pageNumber + 1 < totalPages}">Next</a>
+    </div>-->
+   <!-- <div>
+      <a th:href="@{/user/assigned-question(userId=${userId}, category=${category}, level=${level}, setNumber=${setNumber}, page=${pageNumber - 1})}" th:if="${pageNumber > 0}">Previous</a>
+      <a th:href="@{/user/assigned-question(userId=${userId}, category=${category}, level=${level}, setNumber=${setNumber}, page=${pageNumber + 1})}" th:if="${pageNumber + 1 < totalPages}">Next</a>
+    </div>-->
 
     <!-- Submit button -->
     <div class="submit" th:if="${questions.last}">
@@ -62,10 +70,7 @@
 
   </div>
 
-  <!-- display page number in the header -->
-  <div class="header">
-    <span>Page <span th:text="${questions.number + 1}"></span> of <span th:text="${totalCount}"></span></span>
-  </div>
+
 
 </section>
 </body>

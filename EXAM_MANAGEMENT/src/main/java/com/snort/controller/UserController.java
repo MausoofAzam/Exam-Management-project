@@ -15,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,7 @@ public class UserController {
     @Autowired
     private QuestionService questionService;
 
+    /*This Handler addCommonData is used to get The logged-in Username */
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
 
@@ -52,11 +54,11 @@ public class UserController {
         System.out.println("USERNAME :" + userName);
 
         User user = userRepository.getUserByUserName(userName);
-//        System.out.println("USER :" + user);
         model.addAttribute("user", user);
 
     }
 
+    /*This handler is used to  show the User Home page, */
     @RequestMapping("/index")
     public String dashboard(Model model, Principal principal) {
         model.addAttribute("title", "User Dashboard");
@@ -64,7 +66,7 @@ public class UserController {
         return "normal/user_dashboard";
     }
 
-    // open add form handler
+    /*This Handler is used to open the add contact page when the user clicks on /add-contact link or button*/
     @GetMapping("/add-contact")
     public String openAddContactForm(Model model) {
 
@@ -73,6 +75,7 @@ public class UserController {
         return "normal/add_contact_form";
     }
 
+    /*This processContact handler is used to add the contact */
     @PostMapping("/process-contact")
     public String processContact(@ModelAttribute Contact contact, @RequestParam("profileImage") MultipartFile file,
                                  Principal principal, HttpSession session) {
@@ -115,7 +118,7 @@ public class UserController {
         return "normal/add_contact_form";
     }
 
-    /* Show contact Handler*/
+    /* Show-contact Handler is used to show the contact of the particular user */
     @GetMapping("/show-contacts")
     public String showContact(Model model, Principal principal) {
         model.addAttribute("title", "Show User Contacts");
@@ -126,6 +129,7 @@ public class UserController {
         return "normal/show_contacts";
     }
 
+    /* this handler is used to delete the Contact of any Particular user that he has saved and it will redirect to the show-contact page*/
     @GetMapping("/delete/{cid}")
     public String deleteContact(@PathVariable("cid") Integer cId, Model model, HttpSession session, Principal principal) {
         System.out.println("CID :" + cId);
@@ -149,24 +153,24 @@ public class UserController {
     }
 
     //update for Handler
-    @PostMapping("/open-contact/{cId}")
+  /*  @PostMapping("/open-contact/{cId}")
     public String updateForm(@PathVariable("cId") int cId, Model model) {
         Contact contact = this.contactRepository.findById(cId).get();
         model.addAttribute("title", "Update-Contact");
         model.addAttribute("contact", contact);
         return "normal/update_form";
-    }
+    }*/
 
     //update contact handler
-    @PostMapping("/process-update")
-    public String updateHandler(@ModelAttribute Contact contact, /*@RequestParam("profileImage") MultipartFile file,*/
-                                Model m, HttpSession session, Principal principal) {
+   /* @PostMapping("/process-update")
+    public String updateHandler(@ModelAttribute Contact contact, *//*@RequestParam("profileImage") MultipartFile file,*//*
+                                Model m, *//*HttpSession session,*//* Principal principal) {
 
         try {
 
             Contact oldContactDetail = this.contactRepository.findById(contact.getCId()).get();
 
-            /*if(!file.isEmpty()) {
+            *//*if(!file.isEmpty()) {
 
                 File deleteFile = new ClassPathResource("static/img").getFile();
                 File file1=new File(deleteFile, oldContactDetail.getImage());
@@ -186,7 +190,7 @@ public class UserController {
 
                 contact.setImage(oldContactDetail.getImage());
 
-            }*/
+            }*//*
             User user = this.userRepository.getUserByUserName(principal.getName());
 
             contact.setUser(user);
@@ -203,7 +207,7 @@ public class UserController {
         return "redirect:normal/show_contacts";
 
     }
-
+*/
     //handler for profile
     @GetMapping("/profile")
     public String yourProfile(Model model) {
@@ -213,6 +217,7 @@ public class UserController {
         return "normal/profile";
     }
 
+    /*This handler is used to search the particular contact */
     @GetMapping("/search")
     public ModelAndView searchBy(HttpServletRequest request) {
         ModelAndView view = new ModelAndView("normal/show_contacts");
@@ -244,23 +249,25 @@ public class UserController {
         view.addObject("contactList", contactList);
         return view;
     }
+
+    /*Handler to open a new page to go to assigned_question exams*/
     @GetMapping("/start")
     public String examPage(Model model, Principal principal) {
-        // Get the email from the Principal object
         String email = principal.getName();
 
         model.addAttribute("title", "exam section");
-        model.addAttribute("email", email); // Add the email to the model
+        model.addAttribute("email", email);
 
         return "normal/assigned_question";
     }
 
+    /*here this handler will give assigned questions to the student*/
     @GetMapping("/assigned-question")
     public String getAssignedQuestion(Principal principal,
                                       @RequestParam(required = false, name = "category") String category,
                                       @RequestParam(required = false, name = "level") String level,
                                       @RequestParam(required = false, name = "setNumber") Integer setNumber,
-                                      @RequestParam(defaultValue = "0") int pageNumber,
+                                      @RequestParam(defaultValue = "1") int pageNumber,
                                       Model model) {
         String email = principal.getName();
         User user = userRepository.findByEmail(email);
@@ -273,13 +280,13 @@ public class UserController {
         model.addAttribute("questions", questionPage);
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("totalPages", questionPage.getTotalPages());
-        model.addAttribute("totalCount", questionService.countByCategoryAndLevelAndSetNumber(category, level, setNumber));
-        model.addAttribute("totalMarks", questionService.addMarksByCategoryAndLevelAndSetNumber(category, level, setNumber));
-
+        model.addAttribute("category",category);
+        model.addAttribute("level",level);
+        model.addAttribute("setNumber",setNumber);
+        System.out.println("category : "+category+"Level : "+level+"Set Number :"+setNumber);
+        System.out.println("UserId : "+userId+ ":Page number : "+pageNumber+ "total pages :"+questionPage.getTotalPages());
         return "normal/exam_questions";
     }
-
-
 
 
 }

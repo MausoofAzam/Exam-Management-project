@@ -11,12 +11,11 @@ import java.util.stream.Collectors;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-/*
     public List<User> findAllNonAdminUsers() {
         List<User> userList = userRepository.findAll();
         List<User> nonAdminUsers = userList.stream()
-                .filter(user -> !user.getRole().equals("ADMIN"))
+                .filter(user -> !user.getRole().equals("ROLE_ADMIN"))
                 .collect(Collectors.toList());
         return nonAdminUsers;
-    }*/
+    }
 }
