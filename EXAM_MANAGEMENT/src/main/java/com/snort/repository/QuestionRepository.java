@@ -12,11 +12,10 @@ import java.util.List;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
-    List<Question> findByCategoryAndLevel(String category, String level);
+//    List<Question> findByCategoryAndLevel(String category, String level);
 
     List<Question> findByCategoryAndLevelAndSetNumber(String category,String level, Integer setNumber);
 
-    List<Question> findBySetNumber(Integer setNumber);
     Integer countByCategoryAndLevelAndSetNumber(String category,String level,Integer setNumber);
     @Query(value = "select sum(total_marks) from question where category=:category and level= :level and set_number=:setNumber",nativeQuery = true)
     Integer sumByCategoryAndLevelAndSetNumber(String category,String level,Integer setNumber);

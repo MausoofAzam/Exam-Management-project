@@ -19,5 +19,7 @@ public class UserQuestion {
     @Column(name = "question_id")
     private Long questionId;
 
+    private int marks;
+
 
 }

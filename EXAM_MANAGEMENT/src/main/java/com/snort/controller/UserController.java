@@ -273,20 +273,19 @@ public class UserController {
         User user = userRepository.findByEmail(email);
 
         int userId = user.getId();
-
-        Pageable pageable = PageRequest.of(pageNumber, 1);
+        Pageable pageable = PageRequest.of(pageNumber-1,1);
         Page<Question> questionPage = userQuestionService.getAssignedQuestion(userId, pageable);
         model.addAttribute("userId", userId);
         model.addAttribute("questions", questionPage);
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("totalPages", questionPage.getTotalPages());
-        model.addAttribute("category",category);
-        model.addAttribute("level",level);
-        model.addAttribute("setNumber",setNumber);
-        System.out.println("category : "+category+"Level : "+level+"Set Number :"+setNumber);
-        System.out.println("UserId : "+userId+ ":Page number : "+pageNumber+ "total pages :"+questionPage.getTotalPages());
+        System.out.println("UserId : "+userId+ ":Page number : "+pageNumber+ " :total pages :"+questionPage.getTotalPages());
         return "normal/exam_questions";
     }
-
+    @GetMapping("/result")
+    public String showResultPage(Model model) {
+        model.addAttribute("title","success");
+        return "normal/result";
+    }
 
 }

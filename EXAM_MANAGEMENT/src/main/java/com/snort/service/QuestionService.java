@@ -46,10 +46,7 @@ public class QuestionService {
 
     }
 
-    public List<Question> findByCateoryAndLevel(String category, String level){
-        List<Question> byCategoryAndLevel = questionRepository.findByCategoryAndLevel(category, level);
-        return byCategoryAndLevel;
-    }
+
     public List<Question> findAllQuestions(){
         List<Question> questionList = questionRepository.findAll();
         return questionList;
@@ -61,9 +58,6 @@ public class QuestionService {
         }
     }
 
-    public List<Question> findBySetNumber(Integer setNumber){
-        return questionRepository.findBySetNumber(setNumber);
-    }
     public Integer countByCategoryAndLevelAndSetNumber(String category,String level,Integer setNumber){
         return questionRepository.countByCategoryAndLevelAndSetNumber(category,level,setNumber);
     }
