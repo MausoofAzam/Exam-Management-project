@@ -2,11 +2,8 @@ package com.snort.service;
 
 
 import com.snort.dto.QuestionRequest;
-import com.snort.entities.Option;
 import com.snort.entities.Question;
-import com.snort.repository.OptionRepository;
 import com.snort.repository.QuestionRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,19 +16,10 @@ public class QuestionService {
 
     @Autowired
     private QuestionRepository questionRepository;
-    @Autowired
-    private OptionRepository optionRepository;
+
 
     public Question createQuestion(QuestionRequest questionRequest){
         Question question = new Question(questionRequest);
-        Option option = new Option();
-        option.setOption1(questionRequest.getOption1());
-        option.setOption2(questionRequest.getOption2());
-        option.setOption3(questionRequest.getOption3());
-        option.setOption4(questionRequest.getOption4());
-        option.setTitle(questionRequest.getTitle());
-        option = optionRepository.save(option);
-        question.setOptions(option);
         question.setCategory(questionRequest.getCategory());
         question.setQuestionDescription(questionRequest.getQuestionDescription());
         question.setLevel(questionRequest.getLevel());
@@ -40,6 +28,12 @@ public class QuestionService {
         question.setQuestionType(questionRequest.getQuestionType());
         question.setTotalMarks(questionRequest.getTotalMarks());
         question.setQuestionType(questionRequest.getQuestionType());
+
+        question.setOption1(questionRequest.getOption1());
+        question.setOption2(questionRequest.getOption2());
+        question.setOption2(questionRequest.getOption3());
+        question.setOption4(questionRequest.getOption4());
+        question.setTitle(questionRequest.getTitle());
 
         questionRepository.save(question);
         return question;

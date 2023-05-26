@@ -1,7 +1,6 @@
 package com.snort.dto;
 
 
-import com.snort.entities.Option;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class QuestionResponse {
     private String questionType;
-    private Option options;
     private Integer totalMarks;
     private String category;
     private String level;

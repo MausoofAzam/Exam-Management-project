@@ -4,14 +4,16 @@ import com.snort.dto.QuestionRequest;
 import com.snort.entities.Contact;
 import com.snort.entities.Question;
 import com.snort.entities.User;
+import com.snort.helper.Helper;
 import com.snort.repository.ContactRepository;
-import com.snort.repository.OptionRepository;
 import com.snort.repository.UserRepository;
+import com.snort.service.ExcelService;
 import com.snort.service.QuestionService;
 import com.snort.service.UserQuestionService;
 import com.snort.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +31,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -40,8 +43,7 @@ public class AdminController {
     private QuestionService questionService;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private OptionRepository optionRepository;
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -49,6 +51,9 @@ public class AdminController {
 
     @Autowired
     private UserQuestionService userQuestionService;
+
+    @Autowired
+    private ExcelService excelService;
 
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
@@ -220,7 +225,7 @@ public class AdminController {
         return "admin/startExamsDemo";
     }
 
-/*Handler for Showing the List of Question to the Admin/TL based on Category,Level and description*/
+    /*Handler for Showing the List of Question to the Admin/TL based on Category,Level and description*/
     @GetMapping("/mcq/examsList")
     public String startExam(Model model,
                             @RequestParam(required = false, name = "category") String category,
@@ -239,6 +244,7 @@ public class AdminController {
             model.addAttribute("totalCount", questionService.countByCategoryAndLevelAndSetNumber(category, level, setNumber));
             model.addAttribute("totalMarks", questionService.addMarksByCategoryAndLevelAndSetNumber(category, level, setNumber));
             System.out.println("Questions assigned");
+            System.out.println("questions: "+questions);
             return "admin/assign_exam";
         } else {
             return "admin/startExamsDemo";
@@ -247,15 +253,15 @@ public class AdminController {
 
     /*this is rest Api to check from postman*/
 
- /*   @PostMapping("/assign/{userId}/{category}/{level}/{setNumber}")
-    public ResponseEntity<?> assignQuestionsToUser(@PathVariable Long userId,
-                                                   @PathVariable String category,
-                                                   @PathVariable String level,
-                                                   @PathVariable Integer setNumber) {
-        userQuestionService.assignQuestionsToUser(userId, category, level, setNumber);
-        return ResponseEntity.ok().build();
-    }*/
-/*This assignQuestionsToUser handler is used to assign the Question to the particular user*/
+    /*   @PostMapping("/assign/{userId}/{category}/{level}/{setNumber}")
+       public ResponseEntity<?> assignQuestionsToUser(@PathVariable Long userId,
+                                                      @PathVariable String category,
+                                                      @PathVariable String level,
+                                                      @PathVariable Integer setNumber) {
+           userQuestionService.assignQuestionsToUser(userId, category, level, setNumber);
+           return ResponseEntity.ok().build();
+       }*/
+    /*This assignQuestionsToUser handler is used to assign the Question to the particular user*/
     @PostMapping("/assign-question")
     public String assignQuestionsToUser(@RequestParam int userId,
                                         @RequestParam String category,
@@ -269,5 +275,25 @@ public class AdminController {
         return "admin/assigned_success";
     }
 
+    /* Handler for Uploading the data from excel sheet and save it into the database.*/
+    @PostMapping("/sheet/upload")
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file ,Model model) {
 
+        if (Helper.checkExcelFormat(file)) {
+            this.excelService.save(file);
+            return ResponseEntity.ok(Map.of("message", "File is uploaded and data is saved to db"));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please upload excel file ");
+    }
+    @GetMapping("/uploadQuestionPage")
+    public String uploadingQuestion(Model model){
+        model.addAttribute("title","upload your Question Here");
+        return "admin/uploadQuestionPage";
+    }
+
+    @GetMapping("/sheet")
+    public List<Question> getAllProduct() {
+        return this.excelService.getAllQuestions();
+    }
 }
+
