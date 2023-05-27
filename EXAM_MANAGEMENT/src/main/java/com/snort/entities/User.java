@@ -30,6 +30,8 @@ public class User {
     private String imageUrl;
     @Column(length = 500)
     private String about;
+    private int score;
+
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")//that means if you add user all the field will be selected for user,same in case of delete also,
     private List<Contact> contacts= new ArrayList<>();//it will take contact also
 }

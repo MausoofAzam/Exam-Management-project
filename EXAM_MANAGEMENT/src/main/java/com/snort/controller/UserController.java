@@ -1,10 +1,13 @@
 package com.snort.controller;
 
+import com.snort.dto.ExamResult;
 import com.snort.entities.Contact;
 import com.snort.entities.Question;
 import com.snort.entities.User;
+import com.snort.entities.UserQuestion;
 import com.snort.helper.Message;
 import com.snort.repository.ContactRepository;
+import com.snort.repository.QuestionRepository;
 import com.snort.repository.UserQuestionRepository;
 import com.snort.repository.UserRepository;
 import com.snort.service.QuestionService;
@@ -32,6 +35,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -45,6 +49,11 @@ public class UserController {
     private UserQuestionService userQuestionService;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private UserQuestionRepository userQuestionRepository;
+
+    @Autowired
+    private QuestionRepository  questionRepository;
 
     /*This Handler addCommonData is used to get The logged-in Username */
     @ModelAttribute
@@ -282,10 +291,81 @@ public class UserController {
         System.out.println("UserId : "+userId+ ":Page number : "+pageNumber+ " :total pages :"+questionPage.getTotalPages());
         return "normal/exam_questions";
     }
-    @GetMapping("/result")
-    public String showResultPage(Model model) {
-        model.addAttribute("title","success");
+//    @GetMapping("/result")
+//    public String showResultPage(Model model) {
+//        model.addAttribute("title","success");
+//        return "normal/result";
+//    }
+
+
+/*    public ExamResult getExamResult(int userId) {
+        // Retrieve all UserQuestion records for the given user
+        List<UserQuestion> userQuestions = userQuestionRepository.findByUserId(userId);
+
+        int score = 0;
+        // Loop through each UserQuestion record
+        for (UserQuestion userQuestion : userQuestions) {
+            // Retrieve the corresponding Question record
+            Question question = userQuestionRepository.findById(userQuestion.getQuestionId()).orElse(null);
+            if (question != null) {
+                // Calculate the score based on the user's answer and the correct answer
+                if (userQuestion.getAnswer().equals(question.getCorrectAnswer())) {
+                    score += question.getTotalMarks();
+                }
+            }
+        }
+
+        // Save the score to the User record
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            user.setScore(score);
+            userRepository.save(user);
+        }
+
+        // Create and return an ExamResult object with the calculated score
+        return new ExamResult(userId, score);
+    }*/
+
+
+    @PostMapping("/calculate-score")
+    public String calculateScore(Principal principal,
+                                 @RequestParam("questionIds[]") List<Long> questionIds,
+                                 @RequestParam Map<String, String> selectedOptions,
+                                 Model model) {
+        String email = principal.getName();
+        User user = userRepository.findByEmail(email);
+        int userId = user.getId();
+
+        // Calculate the score and save the answers
+        int score = 0;
+        List<UserQuestion> userQuestions = new ArrayList<>();
+
+        for (Long questionId : questionIds) {
+            String selectedOption = selectedOptions.get("question-" + questionId);
+            Question question = questionRepository.findById(questionId).orElse(null);
+
+            if (question != null) {
+                UserQuestion userQuestion = new UserQuestion();
+                userQuestion.setUserId(userId);
+                userQuestion.setQuestionId(questionId);
+                userQuestion.setAnswer(selectedOption);
+                userQuestion.setScore(selectedOption != null && selectedOption.equals(question.getCorrectAnswer()) ? question.getTotalMarks() : 0);
+
+                score += userQuestion.getScore();
+                userQuestions.add(userQuestion);
+            }
+        }
+
+        // Save the user's answers and update the score
+        userQuestionRepository.saveAll(userQuestions);
+        user.setScore(score);
+        userRepository.save(user);
+
+        // Add the score to the model for display
+        model.addAttribute("score", score);
+
         return "normal/result";
     }
+
 
 }

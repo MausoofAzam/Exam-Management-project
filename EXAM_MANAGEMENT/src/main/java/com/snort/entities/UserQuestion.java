@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Data
 @Table(name = "user_question")
 public class UserQuestion {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -19,7 +18,6 @@ public class UserQuestion {
     @Column(name = "question_id")
     private Long questionId;
 
-    private int marks;
-
-
+    private String answer;
+    private int score;
 }
