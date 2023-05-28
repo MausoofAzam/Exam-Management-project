@@ -161,62 +161,7 @@ public class UserController {
         return "redirect:/user/show-contacts";
     }
 
-    //update for Handler
-  /*  @PostMapping("/open-contact/{cId}")
-    public String updateForm(@PathVariable("cId") int cId, Model model) {
-        Contact contact = this.contactRepository.findById(cId).get();
-        model.addAttribute("title", "Update-Contact");
-        model.addAttribute("contact", contact);
-        return "normal/update_form";
-    }*/
 
-    //update contact handler
-   /* @PostMapping("/process-update")
-    public String updateHandler(@ModelAttribute Contact contact, *//*@RequestParam("profileImage") MultipartFile file,*//*
-                                Model m, *//*HttpSession session,*//* Principal principal) {
-
-        try {
-
-            Contact oldContactDetail = this.contactRepository.findById(contact.getCId()).get();
-
-            *//*if(!file.isEmpty()) {
-
-                File deleteFile = new ClassPathResource("static/img").getFile();
-                File file1=new File(deleteFile, oldContactDetail.getImage());
-                file1.delete();
-
-
-                File saveFile = new ClassPathResource("static/img").getFile();
-
-                Path path = Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
-
-                Files.copy(file.getInputStream(),path, StandardCopyOption.REPLACE_EXISTING);
-
-                contact.setImage(file.getOriginalFilename());
-
-
-            }else {
-
-                contact.setImage(oldContactDetail.getImage());
-
-            }*//*
-            User user = this.userRepository.getUserByUserName(principal.getName());
-
-            contact.setUser(user);
-
-            this.contactRepository.save(contact);
-
-//            session.setAttribute("message", new Message("Your Contact Is Updated","success"));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-//        return "redirect:/user/"+contact.getCId()+"/contact";
-        return "redirect:normal/show_contacts";
-
-    }
-*/
     //handler for profile
     @GetMapping("/profile")
     public String yourProfile(Model model) {
@@ -291,40 +236,6 @@ public class UserController {
         System.out.println("UserId : "+userId+ ":Page number : "+pageNumber+ " :total pages :"+questionPage.getTotalPages());
         return "normal/exam_questions";
     }
-//    @GetMapping("/result")
-//    public String showResultPage(Model model) {
-//        model.addAttribute("title","success");
-//        return "normal/result";
-//    }
-
-
-/*    public ExamResult getExamResult(int userId) {
-        // Retrieve all UserQuestion records for the given user
-        List<UserQuestion> userQuestions = userQuestionRepository.findByUserId(userId);
-
-        int score = 0;
-        // Loop through each UserQuestion record
-        for (UserQuestion userQuestion : userQuestions) {
-            // Retrieve the corresponding Question record
-            Question question = userQuestionRepository.findById(userQuestion.getQuestionId()).orElse(null);
-            if (question != null) {
-                // Calculate the score based on the user's answer and the correct answer
-                if (userQuestion.getAnswer().equals(question.getCorrectAnswer())) {
-                    score += question.getTotalMarks();
-                }
-            }
-        }
-
-        // Save the score to the User record
-        User user = userRepository.findById(userId).orElse(null);
-        if (user != null) {
-            user.setScore(score);
-            userRepository.save(user);
-        }
-
-        // Create and return an ExamResult object with the calculated score
-        return new ExamResult(userId, score);
-    }*/
 
 
     @PostMapping("/calculate-score")
@@ -360,7 +271,9 @@ public class UserController {
         // Save the user's answers and update the score
         userQuestionRepository.saveAll(userQuestions);
         user.setScore(score);
-        userRepository.save(user);
+        User user1 = userRepository.save(user);
+
+        System.out.println("saved user :" +user1);
 
         // Add the score to the model for display
         model.addAttribute("score", score);

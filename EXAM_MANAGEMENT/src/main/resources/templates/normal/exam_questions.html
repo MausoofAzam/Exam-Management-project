@@ -40,7 +40,8 @@
       </div>
 
       <!-- display the navigation buttons -->
-      <div>
+      <!-- display the navigation buttons -->
+      <div class="button-container">
         <div th:if="${pageNumber > 1}">
           <a th:href="@{/user/assigned-question(pageNumber=${pageNumber - 1})}">Previous</a>
         </div>
@@ -48,17 +49,19 @@
         <div th:if="${pageNumber < totalPages}">
           <a id="next-button" th:href="@{/user/assigned-question(pageNumber=${pageNumber + 1})}">Next</a>
         </div>
+      </div>
 
-        <!-- Submit button -->
+
+      <!-- Submit button -->
         <div class="submit" th:if="${questions.last}">
           <button type="submit">Submit</button>
         </div>
       </div>
 
-      <div class="selected-info">
-        <h5 hidden="hidden">UserId: <span th:text="${userId}"></span></h5>
-        <h5>Page <span th:text="${pageNumber}"></span> of <span th:text="${totalPages}"></span></h5>
-      </div>
+  <div class="selected-info">
+    <h5 hidden="hidden">UserId: <span th:text="${userId}"></span></h5>
+    <h5>Page <span th:text="${pageNumber}"></span> of <span th:text="${totalPages}"></span></h5>
+  </div>
     </form>
   </div>
 
