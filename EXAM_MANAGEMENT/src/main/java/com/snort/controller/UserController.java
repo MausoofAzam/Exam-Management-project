@@ -355,7 +355,8 @@ public class UserController {
                 userQuestions.add(userQuestion);
             }
         }
-
+        System.out.println("Question ids :"+questionIds);
+        System.out.println("selected options : "+selectedOptions);
         // Save the user's answers and update the score
         userQuestionRepository.saveAll(userQuestions);
         user.setScore(score);

@@ -12,9 +12,10 @@
     <!-- display the selected category, level, and setNumber -->
 
     <!-- display the current question -->
-    <div class="question" th:each="question, questionIndex : ${questions.content}">
-      <h2><span th:text="${(pageNumber - 1) * questions.size + questionIndex.index + 1}"></span>. <span th:text="${question.questionType}"></span></h2>
-      <form th:action="@{/user/calculate-score}" method="post">
+    <form id="question-form" th:action="@{/user/calculate-score}" method="post">
+      <div class="question" th:each="question, questionIndex : ${questions.content}">
+        <h2><span th:text="${(pageNumber - 1) * questions.size + questionIndex.index + 1}"></span>. <span th:text="${question.questionType}"></span></h2>
+
         <input type="hidden" name="questionIds[]" th:value="${question.id}">
 
         <div class="option">
@@ -33,32 +34,32 @@
           <input type="radio" th:id="${'option4-' + question.id}" th:name="${'question-' + question.id}" th:value="${question.option4}">
           <label th:for="${'option4-' + question.id}" th:text="${question.option4}"></label>
         </div>
-
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-
-    <!-- display the navigation buttons -->
-    <div>
-      <div th:if="${pageNumber > 1}">
-        <a th:href="@{/user/assigned-question(pageNumber=${pageNumber - 1})}">Previous</a>
       </div>
 
-      <div th:if="${pageNumber < totalPages}">
-        <a th:href="@{/user/assigned-question(pageNumber=${pageNumber + 1})}">Next</a>
+      <!-- display the navigation buttons -->
+      <div>
+        <div th:if="${pageNumber > 1}">
+          <a th:href="@{/user/assigned-question(pageNumber=${pageNumber - 1})}">Previous</a>
+        </div>
+
+        <div th:if="${pageNumber < totalPages}">
+          <a id="next-button" th:href="@{/user/assigned-question(pageNumber=${pageNumber + 1})}">Next</a>
+        </div>
+
+        <!-- Submit button -->
+        <div class="submit" th:if="${questions.last}">
+          <button type="submit">Submit</button>
+        </div>
       </div>
 
-      <!-- Submit button -->
-      <div class="submit" th:if="${questions.last}">
-        <a href="/user/result">Submit</a>
+      <div class="selected-info">
+        <h5 hidden="hidden">UserId: <span th:text="${userId}"></span></h5>
+        <h5>Page <span th:text="${pageNumber}"></span> of <span th:text="${totalPages}"></span></h5>
       </div>
-    </div>
-
-    <div class="selected-info">
-      <h5 hidden="hidden">UserId: <span th:text="${userId}"></span></h5>
-      <h5>Page <span th:text="${pageNumber}"></span> of <span th:text="${totalPages}"></span></h5>
-    </div>
+    </form>
   </div>
+
+
 </section>
 </body>
 </html>
