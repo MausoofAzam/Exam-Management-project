@@ -272,6 +272,10 @@ public class AdminController {
         System.out.println("level : " + level);
         System.out.println("setNumber : " + setNumber);
         userQuestionService.assignQuestionsToUser(userId, category, level, setNumber);
+
+        User user = userRepository.findById(userId).get();
+        user.setHasAssignedQuestions(true);
+        userRepository.save(user);
         return "admin/assigned_success";
     }
 
