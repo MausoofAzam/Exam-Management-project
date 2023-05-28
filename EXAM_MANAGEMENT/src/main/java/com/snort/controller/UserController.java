@@ -364,6 +364,8 @@ public class UserController {
 
         // Add the score to the model for display
         model.addAttribute("score", score);
+        model.addAttribute("name",email);
+
 
         return "normal/result";
     }

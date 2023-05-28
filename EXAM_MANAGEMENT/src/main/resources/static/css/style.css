@@ -141,3 +141,10 @@ body {
           margin-bottom: 10px;
         }
 
+    .option {
+      display: flex;
+      align-items: center;
+    }
+     .option label {
+          margin-left: 10px;
+        }
