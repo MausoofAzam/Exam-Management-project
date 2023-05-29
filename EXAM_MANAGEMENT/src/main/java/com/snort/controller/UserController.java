@@ -251,19 +251,20 @@ public class UserController {
         int score = 0;
         List<UserQuestion> userQuestions = new ArrayList<>();
 
+        List<UserQuestion> userQuestion= userQuestionRepository.findByUserId(userId);
+
         for (Long questionId : questionIds) {
+           List<UserQuestion>  questions = userQuestionRepository.findByUserIdAndQuestionId(userId, questionId);
             String selectedOption = selectedOptions.get("question-" + questionId);
             Question question = questionRepository.findById(questionId).orElse(null);
+            for (UserQuestion userQuestion1 : questions){
+                userQuestion1.setAnswer(selectedOption);
 
-            if (question != null) {
-                UserQuestion userQuestion = new UserQuestion();
-                userQuestion.setUserId(userId);
-                userQuestion.setQuestionId(questionId);
-                userQuestion.setAnswer(selectedOption);
-                userQuestion.setScore(selectedOption != null && selectedOption.equals(question.getCorrectAnswer()) ? question.getTotalMarks() : 0);
-
-                score += userQuestion.getScore();
-                userQuestions.add(userQuestion);
+                userQuestion1.setScore(selectedOption!=null && selectedOption.equals(question.getCorrectAnswer())?
+                        question.getTotalMarks() :0);
+                score += userQuestion1.getScore();
+                System.out.println("score : "+score);
+                userQuestionRepository.save(userQuestion1);
             }
         }
         System.out.println("Question ids :"+questionIds);
@@ -273,7 +274,6 @@ public class UserController {
         user.setScore(score);
         User user1 = userRepository.save(user);
 
-        System.out.println("saved user :" +user1);
 
         // Add the score to the model for display
         model.addAttribute("score", score);
@@ -282,6 +282,8 @@ public class UserController {
 
         return "normal/result";
     }
+
+
 
 
 }

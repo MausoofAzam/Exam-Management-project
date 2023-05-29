@@ -2,10 +2,12 @@ package com.snort.controller;
 
 import com.snort.dto.QuestionRequest;
 import com.snort.entities.Contact;
+import com.snort.entities.Notice;
 import com.snort.entities.Question;
 import com.snort.entities.User;
 import com.snort.helper.Helper;
 import com.snort.repository.ContactRepository;
+import com.snort.repository.NoticeRepository;
 import com.snort.repository.UserRepository;
 import com.snort.service.ExcelService;
 import com.snort.service.QuestionService;
@@ -54,6 +56,9 @@ public class AdminController {
 
     @Autowired
     private ExcelService excelService;
+
+    @Autowired
+    private NoticeRepository noticeRepository;
 
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
@@ -295,9 +300,28 @@ public class AdminController {
         return "admin/uploadQuestionPage";
     }
 
-    @GetMapping("/sheet")
-    public List<Question> getAllProduct() {
-        return this.excelService.getAllQuestions();
+    /*Handler to create the Notice and Tested by Postman*/
+
+    /*@PostMapping("/createNotice")
+    public Notice createNotices(@RequestBody Notice notice){
+      return   noticeRepository.save(notice);
     }
+*/
+
+    @GetMapping("/notice")
+    public String createNoticePage(Model model){
+        model.addAttribute("title","Notice Create page");
+                return "admin/create_notice";
+    }
+    @PostMapping("/createNotice")
+    public String postNotices(Model model,
+                              @RequestParam Notice notice){
+        noticeRepository.save(notice);
+        model.addAttribute("notice",notice);
+        System.out.println("Notice :"+notice);
+
+        return "admin/createNotice";
+    }
+
 }
 

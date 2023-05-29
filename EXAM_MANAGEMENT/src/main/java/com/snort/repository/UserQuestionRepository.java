@@ -10,4 +10,5 @@ import java.util.List;
 public interface UserQuestionRepository extends JpaRepository<UserQuestion, Long> {
         List<UserQuestion> findByUserId(int userId);
     Page<UserQuestion> findByUserId(int userId, Pageable pageable);
+    List<UserQuestion> findByUserIdAndQuestionId( int userId, Long questionId);
 }

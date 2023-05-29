@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="admin/base::layout(~{::section})">
+<head>
+  <meta charset="ISO-8859-1">
+  <title th:text="${title}"></title>
+
+</head>
+
+<body>
+<section>
+  <form action="/admin/createNotice" , method="post">
+    <h1>Here admin can create notice</h1>
+    <input type="text" placeholder="Enter Notice Here" id="messages" name="messages">
+    <button type="submit">Post Notice</button>
+
+  </form>
+</section>
+</body>
+</html>

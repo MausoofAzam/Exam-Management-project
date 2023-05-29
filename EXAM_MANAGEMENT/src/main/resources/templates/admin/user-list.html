@@ -15,7 +15,7 @@
                     <span style="display:inline-block">
                         <div class="container my-1">
                             Search Here: <input type="text" name="optionValue"
-                                                placeholder="Enter name or Email"
+                                                placeholder="Enter name"
                                                 size="50" required/>
                         </div>
                     </span>
@@ -23,7 +23,7 @@
                     <div style="display:inline-block" class="form-group d-inline-block">
                         <select name="optionName" class="form-control d-inline-block">
                             <option value="name"> Name</option>
-                            <option value="email">by Email</option>
+<!--                            <option value="email">by Email</option>-->
                         </select>
                     </div>
                     </span>
@@ -40,7 +40,7 @@
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">ROLE</th>
+<!--                    <th scope="col">ROLE</th>-->
                     <th scope="col">ACTIVE-STATUS</th>
                     <th scope="col">STATUS</th>
                     <th scope="col">ACTION</th>
@@ -50,7 +50,7 @@
                 <tr th:each="user : ${userList}">
                     <td th:text="${user.name}">Mark</td>
                     <td th:text="${user.email}">Mark</td>
-                    <td th:text="${user.role}">Mark</td>
+<!--                    <td th:text="${user.role}">Mark</td>-->
                     <td th:text="${user.enabled}">Mark</td>
                     <td>
                         <span th:if="${user.hasAssignedQuestions}">Questions assigned</span>

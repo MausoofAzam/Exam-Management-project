@@ -12,7 +12,6 @@
 
 <section>
   <div class="container">
-    <!-- display the selected category, level, and setNumber -->
 
     <!-- display the current question -->
     <form id="question-form" th:action="@{/user/calculate-score}" method="post">
@@ -39,7 +38,6 @@
         </div>
       </div>
 
-      <!-- display the navigation buttons -->
       <!-- display the navigation buttons -->
       <div class="button-container">
         <div th:if="${pageNumber > 1}">

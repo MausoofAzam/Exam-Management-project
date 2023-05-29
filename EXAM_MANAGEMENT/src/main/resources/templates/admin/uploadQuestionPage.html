@@ -7,17 +7,18 @@
 <body>
 
 <section>
-  <h2>in this page you can upload Excel file containing questions </h2>
+  <h2>Please upload Excel file containing questions here </h2>
   <form action="#" th:action="@{/admin/sheet/upload}" method="post"  enctype="multipart/form-data">
 
 
 
-    <label for="myfile"> Select a file</label>
+    <label for="myfile"> Select a Excel File</label>
     <input type="file" name="file" id="excel_file" /><br />
     <div id="excel_data" class="mt-5"></div>
 
     <button type="submit" >save</button>
-    <button type="reset">cancel</button>
+    <button type="reset">reset</button>
+    <a href="/admin/index" > Home</a>
   </form>
 </section>
 </body>
