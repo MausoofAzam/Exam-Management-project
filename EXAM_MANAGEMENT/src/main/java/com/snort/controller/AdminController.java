@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -31,6 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -187,13 +189,18 @@ public class AdminController {
 
     /*Handler for delete users*/
     @GetMapping("/deleteUser/{id}")
-    public String deleteUser(@PathVariable(value = "id") int id) {
+    public String deleteUser(@PathVariable(value = "id") int id, RedirectAttributes redirectAttributes) {
         Optional<User> optionalUser = this.userRepository.findById(id);
         User user = optionalUser.get();
-        System.out.println("Deleted User :" + user);
+        System.out.println("Deleted User: " + user);
         this.userRepository.delete(user);
-        return "redirect:admin/user-list";
+
+        // Add a success flash attribute
+        redirectAttributes.addFlashAttribute("successMessage", "Student deleted successfully.");
+
+        return "redirect:/admin/user-list";
     }
+
 
     /*Handler for Search */
     @GetMapping("/search")
@@ -271,29 +278,39 @@ public class AdminController {
     public String assignQuestionsToUser(@RequestParam int userId,
                                         @RequestParam String category,
                                         @RequestParam String level,
-                                        @RequestParam Integer setNumber) {
+                                        @RequestParam Integer setNumber,
+                                        Model model) {
         System.out.println("userId :" + userId);
         System.out.println("category : " + category);
         System.out.println("level : " + level);
         System.out.println("setNumber : " + setNumber);
         userQuestionService.assignQuestionsToUser(userId, category, level, setNumber);
 
-        User user = userRepository.findById(userId).get();
-        user.setHasAssignedQuestions(true);
-        userRepository.save(user);
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            user.setHasAssignedQuestions(true);
+            userRepository.save(user);
+            model.addAttribute("successMessage", "Questions assigned successfully.");
+        } else {
+            model.addAttribute("errorMessage", "Failed to assign questions. User not found.");
+        }
+
         return "admin/assigned_success";
     }
 
+
     /* Handler for Uploading the data from excel sheet and save it into the database.*/
     @PostMapping("/sheet/upload")
-    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file ,Model model) {
-
+    public String upload(@RequestParam("file") MultipartFile file, Model model) {
         if (Helper.checkExcelFormat(file)) {
             this.excelService.save(file);
-            return ResponseEntity.ok(Map.of("message", "File is uploaded and data is saved to db"));
+            model.addAttribute("successMessage", "File is uploaded and data is saved to the database");
+        } else {
+            model.addAttribute("errorMessage", "Please upload an Excel file");
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please upload excel file ");
+        return "admin/uploadQuestionPage";
     }
+
     @GetMapping("/uploadQuestionPage")
     public String uploadingQuestion(Model model){
         model.addAttribute("title","upload your Question Here");
@@ -313,15 +330,31 @@ public class AdminController {
         model.addAttribute("title","Notice Create page");
                 return "admin/create_notice";
     }
-    @PostMapping("/createNotice")
-    public String postNotices(Model model,
-                              @RequestParam Notice notice){
-        noticeRepository.save(notice);
-        model.addAttribute("notice",notice);
-        System.out.println("Notice :"+notice);
 
-        return "admin/createNotice";
+    @PostMapping("/createNotice")
+    public String createNotice(@RequestParam("messages") String messages, Principal principal, Model model) {
+        LocalDate createdDate = LocalDate.now();
+        String email = principal.getName();
+        User user = userRepository.findByEmail(email);
+
+        // Get the name from the user object
+        String createdBy = user.getName();
+
+        // Create a new Notice object
+        Notice notice = new Notice();
+        notice.setMessages(messages);
+        notice.setCreatedDate(createdDate);
+        notice.setCreatedBy(createdBy);
+
+        noticeRepository.save(notice);
+
+        // Add success message to the model
+        model.addAttribute("successMessage", "Notice created successfully!");
+
+        return "admin/create_notice";
     }
+
+
 
 }
 

@@ -6,6 +6,7 @@
 </head>
 <body>
 <section>
+    
     <div class="card mr-3 ml-3">
         <div class="card-body">
             <h1 class="text-center">LIST OF STUDENTS</h1>
@@ -64,6 +65,9 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <div th:if="${successMessage}" class="alert alert-success">
+        <strong>Success:</strong> <span th:text="${successMessage}"></span>
     </div>
 </section>
 </body>

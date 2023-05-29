@@ -1,24 +1,15 @@
 package com.snort.controller;
 
-import com.snort.dto.ExamResult;
-import com.snort.entities.Contact;
-import com.snort.entities.Question;
-import com.snort.entities.User;
-import com.snort.entities.UserQuestion;
+import com.snort.entities.*;
 import com.snort.helper.Message;
-import com.snort.repository.ContactRepository;
-import com.snort.repository.QuestionRepository;
-import com.snort.repository.UserQuestionRepository;
-import com.snort.repository.UserRepository;
+import com.snort.repository.*;
 import com.snort.service.QuestionService;
 import com.snort.service.UserQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +45,8 @@ public class UserController {
 
     @Autowired
     private QuestionRepository  questionRepository;
+    @Autowired
+    private NoticeRepository noticeRepository;
 
     /*This Handler addCommonData is used to get The logged-in Username */
     @ModelAttribute
@@ -281,6 +274,13 @@ public class UserController {
 
 
         return "normal/result";
+    }
+    @GetMapping("/notices")
+    public String getAllNotices(Model model) {
+        List<Notice> notices = noticeRepository.findAll();
+        model.addAttribute("notices", notices);
+        model.addAttribute("title","notice page");
+        return "normal/notices-page";
     }
 
 
