@@ -8,6 +8,7 @@ import com.snort.entities.User;
 import com.snort.helper.Helper;
 import com.snort.repository.ContactRepository;
 import com.snort.repository.NoticeRepository;
+import com.snort.repository.UserQuestionRepository;
 import com.snort.repository.UserRepository;
 import com.snort.service.ExcelService;
 import com.snort.service.QuestionService;
@@ -61,6 +62,8 @@ public class AdminController {
 
     @Autowired
     private NoticeRepository noticeRepository;
+    @Autowired
+    private UserQuestionRepository userQuestionRepository;
 
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
@@ -93,6 +96,14 @@ public class AdminController {
     public String showAllUsers(Model model) {
         List<User> userList = userRepository.findAll();
         List<User> nonAdminUser = userList.stream().filter(user -> !user.getRole().equals("ROLE_ADMIN")).collect(Collectors.toList());
+        for (User user : nonAdminUser){
+            boolean examPerformed=userQuestionRepository.existsById((long) user.getId());
+            user.setHasAttemptExam(examPerformed);
+            if (examPerformed){
+                int score =user.getScore();
+                user.setScore(score);
+            }
+        }
         model.addAttribute("userList", nonAdminUser);
         model.addAttribute("title", "Show User List");
         return "admin/user-list";
@@ -299,7 +310,7 @@ public class AdminController {
     }
 
 
-    /* Handler for Uploading the data from excel sheet and save it into the database.*/
+    /* Handler for Uploading the data from Excel sheet and save it into the database.*/
     @PostMapping("/sheet/upload")
     public String upload(@RequestParam("file") MultipartFile file, Model model) {
         if (Helper.checkExcelFormat(file)) {

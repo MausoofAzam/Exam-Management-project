@@ -15,9 +15,12 @@
     <div th:if="${successMessage}" style="color: green;">File uploaded successfully!</div>
     <div th:if="${errorMessage}" style="color: red;">Please upload an Excel file.</div>
 
-    <button type="submit">Save</button>
-    <button type="reset">Reset</button>
-    <a href="/admin/index">Home</a>
+<!--    <button type="submit">Save</button>-->
+    <button type="submit" class="btn btn-info">Upload Now</button>
+<!--    <button type="reset">Reset</button>-->
+    <button type="reset" class="btn btn-info">Reset</button>
+
+    <a href="/admin/index" class="btn btn-info">Home</a>
   </form>
 </section>
 

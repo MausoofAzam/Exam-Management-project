@@ -267,12 +267,9 @@ public class UserController {
         user.setScore(score);
         User user1 = userRepository.save(user);
 
-
         // Add the score to the model for display
         model.addAttribute("score", score);
         model.addAttribute("name",email);
-
-
         return "normal/result";
     }
     @GetMapping("/notices")
@@ -282,8 +279,5 @@ public class UserController {
         model.addAttribute("title","notice page");
         return "normal/notices-page";
     }
-
-
-
 
 }

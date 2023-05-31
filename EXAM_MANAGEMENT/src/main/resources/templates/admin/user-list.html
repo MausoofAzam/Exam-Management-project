@@ -42,8 +42,9 @@
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
 <!--                    <th scope="col">ROLE</th>-->
-                    <th scope="col">ACTIVE-STATUS</th>
+<!--                    <th scope="col">ACTIVE-STATUS</th>-->
                     <th scope="col">STATUS</th>
+                    <th scope="col">Marks Obtained</th>
                     <th scope="col">ACTION</th>
                 </tr>
                 </thead>
@@ -52,13 +53,16 @@
                     <td th:text="${user.name}">Mark</td>
                     <td th:text="${user.email}">Mark</td>
 <!--                    <td th:text="${user.role}">Mark</td>-->
-                    <td th:text="${user.enabled}">Mark</td>
+<!--                    <td th:text="${user.enabled}">Mark</td>-->
                     <td>
                         <span th:if="${user.hasAssignedQuestions}">Questions assigned</span>
                     </td>
+                    <td th:text="${user.score}">Mark</td>
+
+
                     <td>
                         <a th:href="@{/admin/deleteUser/{id}(id=${user.id})}" class="btn btn-danger">Delete</a>
-                        <a th:href="@{mcq/exam12/{userId}(userId=${user.id})}" class="btn-btn primary btn-sm">GO</a>
+                        <a th:href="@{mcq/exam12/{userId}(userId=${user.id})}" class="btn btn-info">GO</a>
                     </td>
 
                 </tr>

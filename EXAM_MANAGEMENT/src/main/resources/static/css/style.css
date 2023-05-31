@@ -151,13 +151,13 @@ body {
     .button-container {
       display: flex;
       justify-content: space-between;
-      padding: 50px;
+      padding: 5px;
     }
 
     .button-container a {
       color: black;
       text-decoration: none;
-      padding: 40px 10px;
+      padding: 10px 10px;
     }
 
     .selected-info {
@@ -168,4 +168,8 @@ body {
    .item {
      padding: 10px 20px;
      margin: 5px 0;
+   }
+
+   .submit{
+   align: center;
    }
