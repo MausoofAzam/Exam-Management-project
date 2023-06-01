@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="normal/base::layout(~{::section})">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="normal/base::layout(~{::section})">
 <head>
   <meta charset="ISO-8859-1">
   <title th:text="${title}">Success</title>
 
+  <script>
 
+  </script>
 </head>
 
 <body>
-
 <section>
   <div class="container">
-<!--    <li><h4><%= DateTime.now.strftime("%H:%M:%S") %></h4></li>-->
     <!-- display the current question -->
     <form id="question-form" th:action="@{/user/calculate-score}" method="post">
+      <!-- Timer display -->
+      <div id="timer" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">01:00</div>
+
       <div class="question" th:each="question, questionIndex : ${questions.content}">
         <h2><span th:text="${(pageNumber - 1) * questions.size + questionIndex.index + 1}"></span>. <span th:text="${question.questionType}"></span></h2>
 
@@ -45,25 +47,21 @@
         </div>
 
         <div th:if="${pageNumber < totalPages}">
-          <a id="next-button" th:href="@{/user/assigned-question(pageNumber=${pageNumber + 1})}"class="btn btn-secondary" >Next</a>
+          <a id="next-button" th:href="@{/user/assigned-question(pageNumber=${pageNumber + 1})}" class="btn btn-secondary">Next</a>
         </div>
       </div>
-
 
       <!-- Submit button -->
-        <div class="submit" th:if="${questions.last}">
-          <button type="submit" class="btn btn-success" >submit</button>
-        </div>
+      <div class="submit" th:if="${questions.last}">
+        <button type="submit" class="btn btn-success">Submit</button>
       </div>
 
-  <div class="selected-info">
-    <h5 hidden="hidden">UserId: <span th:text="${userId}"></span></h5>
-    <h5>Page <span th:text="${pageNumber}"></span> of <span th:text="${totalPages}"></span></h5>
-  </div>
+      <div class="selected-info">
+        <h5 hidden="hidden">UserId: <span th:text="${userId}"></span></h5>
+        <h5>Page <span th:text="${pageNumber}"></span> of <span th:text="${totalPages}"></span></h5>
+      </div>
     </form>
   </div>
-
-
 </section>
 </body>
 </html>

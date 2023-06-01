@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -240,37 +241,50 @@ public class UserController {
         User user = userRepository.findByEmail(email);
         int userId = user.getId();
 
+        // Save the start time
+        LocalDateTime startTime = user.getStartTime();
+        if (startTime == null) {
+            startTime = LocalDateTime.now();
+            user.setStartTime(startTime);
+            userRepository.save(user);
+        }
+
         // Calculate the score and save the answers
         int score = 0;
         List<UserQuestion> userQuestions = new ArrayList<>();
 
-        List<UserQuestion> userQuestion= userQuestionRepository.findByUserId(userId);
+        List<UserQuestion> userQuestion = userQuestionRepository.findByUserId(userId);
 
         for (Long questionId : questionIds) {
-           List<UserQuestion>  questions = userQuestionRepository.findByUserIdAndQuestionId(userId, questionId);
+            List<UserQuestion> questions = userQuestionRepository.findByUserIdAndQuestionId(userId, questionId);
             String selectedOption = selectedOptions.get("question-" + questionId);
             Question question = questionRepository.findById(questionId).orElse(null);
-            for (UserQuestion userQuestion1 : questions){
+            for (UserQuestion userQuestion1 : questions) {
                 userQuestion1.setAnswer(selectedOption);
 
-                userQuestion1.setScore(selectedOption!=null && selectedOption.equals(question.getCorrectAnswer())?
-                        question.getTotalMarks() :0);
+                userQuestion1.setScore(selectedOption != null && selectedOption.equals(question.getCorrectAnswer()) ?
+                        question.getTotalMarks() : 0);
                 score += userQuestion1.getScore();
-                System.out.println("score : "+score);
                 userQuestionRepository.save(userQuestion1);
             }
         }
-        System.out.println("Question ids :"+questionIds);
-        System.out.println("selected options : "+selectedOptions);
+
         // Save the user's answers and update the score
         userQuestionRepository.saveAll(userQuestions);
         user.setScore(score);
-        User user1 = userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
         // Add the score to the model for display
         model.addAttribute("score", score);
-        model.addAttribute("name",email);
+        model.addAttribute("name", email);
         return "normal/result";
+    }
+
+    // Method to complete the exam and set the end time
+    public void completeExam(User user) {
+        LocalDateTime endTime = LocalDateTime.now();
+        user.setEndTime(endTime);
+        userRepository.save(user);
     }
     @GetMapping("/notices")
     public String getAllNotices(Model model) {

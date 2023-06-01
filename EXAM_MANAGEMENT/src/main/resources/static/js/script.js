@@ -54,3 +54,34 @@ const toggleSidebar = () => {
         }
 
 
+
+   // Function to start the timer
+          function startTimer(duration, display) {
+              var timer = duration, minutes, seconds;
+              setInterval(function () {
+                  minutes = parseInt(timer / 60, 10);
+                  seconds = parseInt(timer % 60, 10);
+
+                  minutes = minutes < 10 ? "0" + minutes : minutes;
+                  seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                  display.textContent = minutes + ":" + seconds;
+
+                  if (--timer < 0) {
+                      timer = 0;
+                      // Perform actions when the time expires
+                      // For example, submit the form or display a message
+                      alert("Time has expired!");
+                      document.getElementById("question-form").submit();
+                  }
+              }, 1000);
+          }
+
+          // Function to initialize the timer
+          function initializeTimer(duration) {
+              var display = document.querySelector('#timer');
+              startTimer(duration, display);
+          }
+
+          // Call the initializeTimer function with the desired duration in seconds (10 minutes = 600 seconds)
+          initializeTimer(60);
