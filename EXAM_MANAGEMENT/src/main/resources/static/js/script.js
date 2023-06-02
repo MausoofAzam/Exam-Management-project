@@ -85,3 +85,27 @@ const toggleSidebar = () => {
 
           // Call the initializeTimer function with the desired duration in seconds (10 minutes = 600 seconds)
           initializeTimer(60);
+
+
+// Get the number of questions from your data
+const numQuestions = 10/* insert the number of questions here */;
+
+// Get the table row element
+const tr = document.querySelector('#question-table tr');
+
+// Add a table cell for each question
+for (let i = 1; i <= numQuestions; i++) {
+  const td = document.createElement('td');
+  td.textContent = `${i}`;
+  tr.appendChild(td);
+}
+
+// Add an event listener to the form to detect when a user attempts a question
+document.getElementById('question-form').addEventListener('change', (event) => {
+  // Get the index of the attempted question
+  const index = [...event.target.form.elements].indexOf(event.target) / 5;
+
+  // Update the corresponding table cell
+  tr.children[index].classList.add('attempted');
+});
+

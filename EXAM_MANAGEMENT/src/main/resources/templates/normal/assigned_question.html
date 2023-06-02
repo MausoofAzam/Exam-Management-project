@@ -3,6 +3,7 @@
 <head>
   <meta charset="ISO-8859-1">
   <title th:text="${title}">Exam Section</title>
+
 </head>
 <body>
 <section>
@@ -11,6 +12,7 @@
     <div align="center">
       <a id="user-link" th:href="@{/user/assigned-question(userId=${userId})}" class="btn btn-primary">Start Exam</a>
     </div>
+  <div id="timer" style="text-align: center; font-size: 24px; margin-top: 20px;"></div>
   </div>
 </section>
 </body>

@@ -173,3 +173,37 @@ body {
    .submit{
    align: center;
    }
+
+
+
+
+
+
+
+  .questions {
+    float: left;
+    width: 70%;
+  }
+  .question-list {
+    float: right;
+    width: 30%;
+  }
+  .question-list table {
+    border-collapse: collapse;
+  }
+  .question-list td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+  }
+
+.attempted {
+  background-color: lightgreen;
+}
+
+
+ #timer {
+      text-align: center;
+      font-size: 24px;
+      margin-top: 20px;
+    }
