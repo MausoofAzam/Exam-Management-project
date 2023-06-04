@@ -53,59 +53,18 @@ const toggleSidebar = () => {
           }
         }
 
-
-
-   // Function to start the timer
-          function startTimer(duration, display) {
-              var timer = duration, minutes, seconds;
-              setInterval(function () {
-                  minutes = parseInt(timer / 60, 10);
-                  seconds = parseInt(timer % 60, 10);
-
-                  minutes = minutes < 10 ? "0" + minutes : minutes;
-                  seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                  display.textContent = minutes + ":" + seconds;
-
-                  if (--timer < 0) {
-                      timer = 0;
-                      // Perform actions when the time expires
-                      // For example, submit the form or display a message
-                      alert("Time has expired!");
-                      document.getElementById("question-form").submit();
-                  }
-              }, 1000);
-          }
-
-          // Function to initialize the timer
-          function initializeTimer(duration) {
-              var display = document.querySelector('#timer');
-              startTimer(duration, display);
-          }
-
-          // Call the initializeTimer function with the desired duration in seconds (10 minutes = 600 seconds)
-          initializeTimer(300);
-
-
-// Get the number of questions from your data
-const numQuestions = 10/* insert the number of questions here */;
-
-// Get the table row element
-const tr = document.querySelector('#question-table tr');
-
-// Add a table cell for each question
-for (let i = 1; i <= numQuestions; i++) {
-  const td = document.createElement('td');
-  td.textContent = `${i}`;
-  tr.appendChild(td);
+/* function to store the options in storage session*/
+function setSelectedOptions() {
+    let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+    for (let questionId in selectedOptions) {
+        let selectedOption = selectedOptions[questionId];
+        let optionElement = document.querySelector("input[name='question-" + questionId + "'][value='" + selectedOption + "']");
+        if (optionElement) {
+            optionElement.checked = true;
+        }
+    }
 }
 
-// Add an event listener to the form to detect when a user attempts a question
-document.getElementById('question-form').addEventListener('change', (event) => {
-  // Get the index of the attempted question
-  const index = [...event.target.form.elements].indexOf(event.target) / 5;
+setSelectedOptions();
 
-  // Update the corresponding table cell
-  tr.children[index].classList.add('attempted');
-});
 

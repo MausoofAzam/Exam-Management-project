@@ -11,8 +11,6 @@
   <div class="container">
     <!-- display the current question -->
     <form id="question-form" th:action="@{/user/calculate-score}" method="post">
-      <!-- Timer display -->
-      <div id="timer" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">01:00</div>
 
       <div class="questions">
         <div class="question" th:each="question, questionIndex : ${questions.content}">
@@ -75,4 +73,3 @@
 </section>
 </body>
 </html>
-<!--<script src="script.js"></script>-->
