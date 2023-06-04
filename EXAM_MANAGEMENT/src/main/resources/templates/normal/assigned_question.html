@@ -9,10 +9,11 @@
 <section>
   <div>
     <h2 align="center">This page is for assigned questions to a particular student</h2>
-    <div align="center">
-      <a id="user-link" th:href="@{/user/assigned-question(userId=${userId})}" class="btn btn-primary">Start Exam</a>
+    <div class= "d-grid gap-2 col-6 mx-auto" align="center">
+      <a id="user-link" th:href="@{/user/assigned-question(userId=${userId})}" class="btn btn-info">Start Exam</a>
     </div>
-  <div id="timer" style="text-align: center; font-size: 24px; margin-top: 20px;"></div>
+
+<!--  <div id="timer" style="text-align: center; font-size: 24px; margin-top: 20px;"></div>-->
   </div>
 </section>
 </body>

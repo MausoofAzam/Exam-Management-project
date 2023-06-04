@@ -84,7 +84,7 @@ const toggleSidebar = () => {
           }
 
           // Call the initializeTimer function with the desired duration in seconds (10 minutes = 600 seconds)
-          initializeTimer(60);
+          initializeTimer(300);
 
 
 // Get the number of questions from your data
