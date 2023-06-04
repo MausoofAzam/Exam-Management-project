@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="normal/base::layout(~{::section})">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="normal/exam_base::layout(~{::section})">
 <head>
   <meta charset="ISO-8859-1">
   <title th:text="${title}">Success</title>
@@ -56,15 +56,6 @@
           <h5 hidden="hidden">UserId: <span th:text="${userId}"></span></h5>
           <h5>Page <span th:text="${pageNumber}"></span> of <span th:text="${totalPages}"></span></h5>
         </div>
-      </div>
-
-      <!-- Add the horizontal table of question numbers -->
-      <div class="question-list">
-        <h3>Questions:</h3>
-        <table id="question-table">
-          <!-- Add a single table row with table cells for each question using JavaScript -->
-          <tr></tr>
-        </table>
       </div>
 
     </form>

@@ -68,3 +68,75 @@ function setSelectedOptions() {
 setSelectedOptions();
 
 
+
+
+
+
+// set the exam duration in minutes
+const examDuration = 60;
+
+// calculate the end time
+const endTime = new Date().getTime() + examDuration * 60000;
+
+// update the timer every second
+const timer = setInterval(function() {
+    // calculate the time left
+    const now = new Date().getTime();
+    const timeLeft = endTime - now;
+
+    // calculate the minutes and seconds left
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+    // update the timer display
+    document.getElementById('time').innerHTML = minutes + "m " + seconds + "s ";
+
+    // stop the timer when the time is up
+    if (timeLeft < 0) {
+        clearInterval(timer);
+        document.getElementById('time').innerHTML = "Time's up!";
+        // submit the exam form here
+    }
+}, 1000);
+
+// get the question elements
+const questions = document.querySelectorAll('.question');
+
+// hide all questions except the first one
+for (let i = 1; i < questions.length; i++) {
+    questions[i].style.display = 'none';
+}
+
+// add event listeners to the previous and next buttons
+document.getElementById('previous-button').addEventListener('click', showPreviousQuestion);
+document.getElementById('next-button').addEventListener('click', showNextQuestion);
+
+// keep track of the current question index
+let currentQuestionIndex = 0;
+
+function showPreviousQuestion() {
+    // hide the current question
+    questions[currentQuestionIndex].style.display = 'none';
+
+    // decrement the current question index
+    currentQuestionIndex--;
+
+    // show the previous question
+    questions[currentQuestionIndex].style.display = 'block';
+}
+
+function showNextQuestion() {
+    // hide the current question
+    questions[currentQuestionIndex].style.display = 'none';
+
+    // increment the current question index
+    currentQuestionIndex++;
+
+    // show the next question
+    questions[currentQuestionIndex].style.display = 'block';
+}
+
+
+
+
+
