@@ -51,6 +51,10 @@ const toggleSidebar = () => {
             input.value = questionId;
             document.getElementById("question-form").appendChild(input);
           }
+          // Delete the selected options and end time from session storage
+//          sessionStorage.removeItem('selectedOptions');
+//          sessionStorage.removeItem('endTime');
+
         }
 
 /* function to store the options in storage session*/
@@ -70,34 +74,43 @@ setSelectedOptions();
 
 
 
- // Set the duration of the exam in minutes
- const examDuration = 10;
-
- // Calculate the end time of the exam
- const endTime = new Date(Date.now() + examDuration * 60000);
-
- // Update the timer every second
- const timer = setInterval(() => {
- // Calculate the remaining time
- const now = new Date();
- const remainingTime = endTime - now;
-
- // Check if the time is up
- if (remainingTime <= 0) {
- clearInterval(timer);
- document.getElementById("timer").textContent = "Time's up!";
- // Automatically submit the exam
- document.getElementById("exam-form").submit();
- } else {
- // Update the timer display
- const minutes = Math.floor(remainingTime / 60000);
- const seconds = Math.floor((remainingTime % 60000) / 1000);
- document.getElementById("timer").textContent = `${minutes}:${seconds.toString().padStart(2, "0")}`;
- }
- }, 1000);
 
 
+const examDuration = 10;
 
+// Check if the end time is stored in session storage
+let endTime = sessionStorage.getItem('endTime');
+
+if (endTime) {
+  // Parse the end time from session storage
+  endTime = new Date(endTime);
+} else {
+  // Calculate the end time of the exam
+  endTime = new Date(Date.now() + examDuration * 60000);
+
+  // Store the end time in session storage
+  sessionStorage.setItem('endTime', endTime);
+}
+
+// Update the timer every second
+const timer = setInterval(() => {
+  // Calculate the remaining time
+  const now = new Date();
+  const remainingTime = endTime - now;
+
+  // Check if the time is up
+  if (remainingTime <= 0) {
+    clearInterval(timer);
+    document.getElementById("timer").textContent = "Time's up!";
+    // Automatically submit the exam
+    document.getElementById("exam-form").submit();
+  } else {
+    // Update the timer display
+    const minutes = Math.floor(remainingTime / 60000);
+    const seconds = Math.floor((remainingTime % 60000) / 1000);
+    document.getElementById("timer").textContent = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  }
+}, 1000);
 
 
 
@@ -115,13 +128,25 @@ for (let i = 1; i <= 12; i++) {
 }
 
 
-// add the 'selected' class to the list item when a question is selected
-li.classList.add('selected');
+// get the selected options from session storage
+let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
 
-// add the 'skipped' class to the list item when a question is skipped
-li.classList.add('skipped');
+// get the list items in the question list
+let listItems = document.querySelectorAll('#question-list li');
 
+// iterate through the list items
+for (let i = 0; i < listItems.length; i++) {
+  let li = listItems[i];
+  let questionNumber = i + 1;
 
-
+  // check if the question has been answered
+  if (selectedOptions.hasOwnProperty(questionNumber)) {
+    // add a green tick mark to indicate that the question has been answered
+    li.innerHTML += ' ✅';
+  } else {
+    // add a red cross mark to indicate that the question has been skipped
+    li.innerHTML += ' ❌';
+  }
+}
 
 
