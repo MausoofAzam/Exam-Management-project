@@ -46,10 +46,10 @@
     position: fixed;
     top: 0;
     right: 0;
-    width: 200px;
+    width: 100px;
     height: 100%;
     background-color: #f1f1f1;
-    padding: 20px;
+    padding: 10px;
 }
 
 .sidebar h3 {
@@ -95,9 +95,7 @@
     background-color: #45a049;
 }
 
+.container {
+  margin-left: 120px; /* adjust this value as needed */
+}
 
-// add the 'selected' class to the list item when a question is selected
-li.classList.add('selected');
-
-// add the 'skipped' class to the list item when a question is skipped
-li.classList.add('skipped');
