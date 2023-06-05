@@ -51,12 +51,12 @@
 
         <!-- Submit button -->
         <div class="submit" align="center" th:if="${questions.last}">
-          <button type="submit" class="btn btn-info btn-lg btn-block">Submit</button>
+          <button type="submit" class="btn btn-info btn-lg btn-block" onclick="onQuestionSubmit()">Submit</button>
         </div>
 
         <div class="selected-info">
           <h5 hidden="hidden">UserId: <span th:text="${userId}"></span></h5>
-          <h5>Page <span th:text="${pageNumber}"></span> of <span th:text="${totalPages}"></span></h5>
+          <h5>Question <span th:text="${pageNumber}"></span> of <span th:text="${totalPages}"></span></h5>
         </div>
       </div>
 

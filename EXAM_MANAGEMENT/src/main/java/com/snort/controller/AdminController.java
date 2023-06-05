@@ -328,13 +328,6 @@ public class AdminController {
         return "admin/uploadQuestionPage";
     }
 
-    /*Handler to create the Notice and Tested by Postman*/
-
-    /*@PostMapping("/createNotice")
-    public Notice createNotices(@RequestBody Notice notice){
-      return   noticeRepository.save(notice);
-    }
-*/
 
     @GetMapping("/notice")
     public String createNoticePage(Model model){

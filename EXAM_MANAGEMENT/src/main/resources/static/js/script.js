@@ -11,8 +11,11 @@ const toggleSidebar = () => {
 		$(".content").css("margin-left", "20%")
 	}
 };
+        let endTime = sessionStorage.getItem('endTime');
+
 
         function storeSelectedOptions() {
+
           let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
           let questionIds = document.querySelectorAll("input[name='questionIds[]']");
           for (let i = 0; i < questionIds.length; i++) {
@@ -34,7 +37,9 @@ const toggleSidebar = () => {
         });}
 
         // Submit the form with the stored selected options when the last page is reached
+        function onQuestionSubmit(){
         if (document.querySelector(".submit")) {
+
           storeSelectedOptions();
           let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
           for (let questionId in selectedOptions) {
@@ -52,9 +57,13 @@ const toggleSidebar = () => {
             document.getElementById("question-form").appendChild(input);
           }
           // Delete the selected options and end time from session storage
-//          sessionStorage.removeItem('selectedOptions');
-//          sessionStorage.removeItem('endTime');
+          sessionStorage.removeItem('selectedOptions');
+          sessionStorage.removeItem('endTime');
 
+          console.log("session removed")
+//            sessionStorage.clear();
+
+}
         }
 
 /* function to store the options in storage session*/
@@ -79,7 +88,7 @@ setSelectedOptions();
 const examDuration = 10;
 
 // Check if the end time is stored in session storage
-let endTime = sessionStorage.getItem('endTime');
+//let endTime = sessionStorage.getItem('endTime');
 
 if (endTime) {
   // Parse the end time from session storage
@@ -101,7 +110,7 @@ const timer = setInterval(() => {
   // Check if the time is up
   if (remainingTime <= 0) {
     clearInterval(timer);
-    document.getElementById("timer").textContent = "Time's up!";
+    document.getElementById("timer").textContent = "Your time is up!.  Submitting Automatically";
     // Automatically submit the exam
     document.getElementById("exam-form").submit();
   } else {
@@ -121,7 +130,7 @@ const totalQuestions = document.querySelectorAll('.question').length;
 const questionList = document.getElementById('question-list');
 
 // add a list item for each question
-for (let i = 1; i <= 12; i++) {
+for (let i = 1; i <= 10; i++) {
     const li = document.createElement('li');
     li.textContent = 'Q. ' + i;
     questionList.appendChild(li);
@@ -142,10 +151,10 @@ for (let i = 0; i < listItems.length; i++) {
   // check if the question has been answered
   if (selectedOptions.hasOwnProperty(questionNumber)) {
     // add a green tick mark to indicate that the question has been answered
-    li.innerHTML += ' ✅';
+    li.innerHTML += '  .✅';
   } else {
     // add a red cross mark to indicate that the question has been skipped
-    li.innerHTML += ' ❌';
+    li.innerHTML += '  .⬜';
   }
 }
 

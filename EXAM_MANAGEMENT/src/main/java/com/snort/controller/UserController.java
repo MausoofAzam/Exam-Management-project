@@ -219,6 +219,8 @@ public class UserController {
                                       Model model) {
         String email = principal.getName();
         User user = userRepository.findByEmail(email);
+        /*to display the name in front-end after completed the exam*/
+        String userName = user.getName();
 
         int userId = user.getId();
         Pageable pageable = PageRequest.of(pageNumber-1,1);
@@ -228,6 +230,13 @@ public class UserController {
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("totalPages", questionPage.getTotalPages());
         System.out.println("UserId : "+userId+ ":Page number : "+pageNumber+ " :total pages :"+questionPage.getTotalPages());
+        if (user.getScore()>0){
+            int score= user.getScore();
+            model.addAttribute("score",score);
+            model.addAttribute("name",userName);
+            return "normal/exam_completed";
+        }
+
         return "normal/exam_questions";
     }
 
@@ -239,6 +248,10 @@ public class UserController {
                                  Model model) {
         String email = principal.getName();
         User user = userRepository.findByEmail(email);
+
+
+        // Get the name from the user object
+        String userName = user.getName();
         int userId = user.getId();
 
         // Save the start time
@@ -276,7 +289,7 @@ public class UserController {
 
         // Add the score to the model for display
         model.addAttribute("score", score);
-        model.addAttribute("name", email);
+        model.addAttribute("name", userName);
         return "normal/result";
     }
 

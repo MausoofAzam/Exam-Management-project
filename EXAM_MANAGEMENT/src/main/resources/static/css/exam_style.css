@@ -43,17 +43,19 @@
    }
 
 .sidebar {
+    margin-top:30px;
+
     position: fixed;
-    top: 0;
-    right: 0;
+    top: 10px;
+    right: 10px;
     width: 100px;
     height: 100%;
-    background-color: #f1f1f1;
-    padding: 10px;
+    background-color: #ced4da;
+    padding: 15px;
 }
 
 .sidebar h3 {
-    margin-top: 0;
+    margin-top: 50px;
 }
 
 .sidebar ul {
@@ -83,7 +85,7 @@
 
 /* style the previous and next buttons */
 #previous-button, #next-button {
-    background-color: #4CAF50;
+    background-color: #00BCD4;
     color: white;
     padding: 12px 20px;
     border: none;
@@ -96,6 +98,8 @@
 }
 
 .container {
-  margin-left: 120px; /* adjust this value as needed */
+  margin-left: 30px; /* adjust this value as needed */
+  margin-right:5px;
+  margin-top:25px;
 }
 
