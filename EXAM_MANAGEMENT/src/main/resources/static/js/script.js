@@ -144,7 +144,7 @@ let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {
 let listItems = document.querySelectorAll('#question-list li');
 
 // iterate through the list items
-for (let i = 0; i < listItems.length; i++) {
+for (let i = 0; i <= listItems.length; i++) {
   let li = listItems[i];
   let questionNumber = i + 1;
 
@@ -159,3 +159,54 @@ for (let i = 0; i < listItems.length; i++) {
 }
 
 
+
+/*
+// get the total number of pages (questions) from the HTML
+const totalPages = parseInt(document.querySelector('.selected-info span:nth-child(3)').textContent);
+
+// get the question list element
+const questionList = document.getElementById('question-list');
+
+// add a list item for each question
+for (let i = 1; i <= totalPages; i++) {
+  const li = document.createElement('li');
+  li.textContent = 'Q. ' + i;
+  questionList.appendChild(li);
+}
+
+// get the selected options from session storage
+let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+
+// get the list items in the question list
+let listItems = document.querySelectorAll('#question-list li');
+
+// iterate through the list items
+for (let i = 0; i <= listItems.length; i++) {
+  let li = listItems[i];
+  let questionNumber = i + 1;
+
+  // check if the question has been answered
+  if (selectedOptions.hasOwnProperty(questionNumber)) {
+    // add a green tick mark to indicate that the question has been answered
+    li.innerHTML += ' .✅';
+  } else {
+    // add a red cross mark to indicate that the question has been skipped
+    li.innerHTML += ' .⬜';
+  }
+}
+
+
+
+
+
+<!-- add the script just before the closing </body> tag -->
+ // clear the session storage when the exam is submitted
+ document.getElementById('question-form').addEventListener('submit', function() {
+   sessionStorage.clear();
+ });
+
+
+  // clear the session storage when a new user starts the exam
+  *//*window.addEventListener('load', function() {
+    sessionStorage.clear();
+  });*/
