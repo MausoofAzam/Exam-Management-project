@@ -123,39 +123,69 @@ const timer = setInterval(() => {
 
 
 
-// get the total number of questions
-const totalQuestions = document.querySelectorAll('.question').length;
+// Get the total number of questions from session storage data
+const selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+const totalQuestions = Object.keys(selectedOptions).length;
 
-// get the question list element
+// Get the question list element
 const questionList = document.getElementById('question-list');
 
-// add a list item for each question
-for (let i = 1; i <= 10; i++) {
-    const li = document.createElement('li');
-    li.textContent = 'Q. ' + i;
-    questionList.appendChild(li);
+// Add a list item for each question
+for (let i = 1; i <= totalQuestions; i++) {
+  const li = document.createElement('li');
+  li.textContent = 'Q. ' + i;
+  questionList.appendChild(li);
 }
 
+// Get the list items in the question list
+const listItems = document.querySelectorAll('#question-list li');
 
-// get the selected options from session storage
-let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+// Iterate through the list items
+for (let i = 0; i < listItems.length; i++) {
+  const li = listItems[i];
+  const questionNumber = i + 1;
 
-// get the list items in the question list
-let listItems = document.querySelectorAll('#question-list li');
-
-// iterate through the list items
-for (let i = 0; i <= listItems.length; i++) {
-  let li = listItems[i];
-  let questionNumber = i + 1;
-
-  // check if the question has been answered
+  // Check if the question has been answered
   if (selectedOptions.hasOwnProperty(questionNumber)) {
-    // add a green tick mark to indicate that the question has been answered
-    li.innerHTML += '  .✅';
+    // Add a green tick mark to indicate that the question has been answered
+    li.innerHTML = 'Q. ' + questionNumber + '  .✅';
   } else {
-    // add a red cross mark to indicate that the question has been skipped
-    li.innerHTML += '  .⬜';
+    // Add a blank square for unanswered questions
+    li.innerHTML = 'Q. ' + questionNumber + '  .⬜';
   }
+}
+
+// Store the selected option when an option is selected
+const questionInputs = document.querySelectorAll('input[type="radio"][name^="question-"]');
+for (let i = 0; i < questionInputs.length; i++) {
+  const input = questionInputs[i];
+
+  input.addEventListener('change', function() {
+    const questionId = input.name.split('-')[1];
+    const selectedOption = input.value;
+
+    // Update the selectedOptions object in session storage
+    selectedOptions[questionId] = selectedOption;
+    sessionStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
+
+    // Update the tick mark for the selected question in the question list
+    const questionIndex = questionId - 1;
+    const questionListItem = listItems[questionIndex];
+
+    if (questionListItem) {
+      // Remove the existing tick mark or blank square
+      questionListItem.innerHTML = 'Q. ' + questionId;
+
+      // Check if the question has been answered
+      if (selectedOptions.hasOwnProperty(questionId)) {
+        // Add a green tick mark
+        questionListItem.innerHTML += '  .✅';
+      } else {
+        // Add a blank square
+        questionListItem.innerHTML += '  .⬜';
+      }
+    }
+  });
 }
 
 
