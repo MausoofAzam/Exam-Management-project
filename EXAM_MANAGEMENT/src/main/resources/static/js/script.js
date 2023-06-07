@@ -210,3 +210,21 @@ for (let i = 0; i <= listItems.length; i++) {
   *//*window.addEventListener('load', function() {
     sessionStorage.clear();
   });*/
+
+
+ /*function storeSelectedOptions() {
+
+          let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+          let questionIds = document.querySelectorAll("input[name='questionIds[]']");
+          console.log('questionIds', questionIds);
+          for (let i = 0; i < questionIds.length; i++) {
+            let questionId = questionIds[i].value;
+            let selectedOption = document.querySelector("input[name='question-" + questionId + "']:checked");
+            if (selectedOption) {
+            selectedOptions[i+1] = {
+                id: questionId,
+                value: selectedOption.value
+            }
+              //selectedOptions[questionId] = selectedOption.value;
+            }
+          }*/
