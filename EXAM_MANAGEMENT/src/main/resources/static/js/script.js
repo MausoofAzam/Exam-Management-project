@@ -11,7 +11,6 @@ const toggleSidebar = () => {
 		$(".content").css("margin-left", "20%")
 	}
 };
-        let endTime = sessionStorage.getItem('endTime');
 
 
         function storeSelectedOptions() {
@@ -37,7 +36,6 @@ const toggleSidebar = () => {
         });}
 
         // Submit the form with the stored selected options when the last page is reached
-        function onQuestionSubmit(){
         if (document.querySelector(".submit")) {
 
           storeSelectedOptions();
@@ -56,15 +54,8 @@ const toggleSidebar = () => {
             input.value = questionId;
             document.getElementById("question-form").appendChild(input);
           }
-          // Delete the selected options and end time from session storage
-          sessionStorage.removeItem('selectedOptions');
-          sessionStorage.removeItem('endTime');
-
-          console.log("session removed")
-//            sessionStorage.clear();
 
 }
-        }
 
 /* function to store the options in storage session*/
 function setSelectedOptions() {
@@ -85,21 +76,22 @@ setSelectedOptions();
 
 
 
-const examDuration = 10;
-
+const examDuration = 5; // duration of the exam in minutes
 // Check if the end time is stored in session storage
-//let endTime = sessionStorage.getItem('endTime');
+let endTime = sessionStorage.getItem('endTime');
 
 if (endTime) {
   // Parse the end time from session storage
   endTime = new Date(endTime);
 } else {
   // Calculate the end time of the exam
-  endTime = new Date(Date.now() + examDuration * 60000);
+  const now = new Date();
+  endTime = new Date(now.getTime() + examDuration * 60000);
 
   // Store the end time in session storage
   sessionStorage.setItem('endTime', endTime);
 }
+
 
 // Update the timer every second
 const timer = setInterval(() => {
@@ -107,12 +99,14 @@ const timer = setInterval(() => {
   const now = new Date();
   const remainingTime = endTime - now;
 
-  // Check if the time is up
-  if (remainingTime <= 0) {
-    clearInterval(timer);
-    document.getElementById("timer").textContent = "Your time is up!.  Submitting Automatically";
-    // Automatically submit the exam
-    document.getElementById("exam-form").submit();
+ // Check if the time is up
+ if (remainingTime <= 0) {
+   clearInterval(timer);
+   document.getElementById("timer").textContent = "Time's up!";
+
+   // Automatically submit the exam
+   document.getElementById("question-form").submit();
+
   } else {
     // Update the timer display
     const minutes = Math.floor(remainingTime / 60000);
@@ -123,53 +117,20 @@ const timer = setInterval(() => {
 
 
 
-// Get the total number of questions from session storage data
-const selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
-const totalQuestions = Object.keys(selectedOptions).length;
 
-// Get the question list element
-const questionList = document.getElementById('question-list');
-
-// Add a list item for each question
-for (let i = 1; i <= totalQuestions; i++) {
-  const li = document.createElement('li');
-  li.textContent = 'Q. ' + i;
-  questionList.appendChild(li);
-}
-
-// Get the list items in the question list
-const listItems = document.querySelectorAll('#question-list li');
-
-// Update the tick mark for each question
-listItems.forEach((li, index) => {
-  const questionNumber = index + 1;
-
-  // Check if the question has been answered
-  if (selectedOptions.hasOwnProperty(questionNumber)) {
-    // Add a green tick mark to indicate that the question has been answered
-    li.innerHTML = 'Q. ' + questionNumber + ' <span class="tick-mark">⬜</span>';
-  } else {
-    // Add a blank square for unanswered questions
-    li.innerHTML = 'Q. ' + questionNumber + ' <span class="blank-square">✅</span>';
-  }
-});
-
-
-
-
-/*
-// get the total number of pages (questions) from the HTML
-const totalPages = parseInt(document.querySelector('.selected-info span:nth-child(3)').textContent);
+// get the total number of questions
+const totalQuestions = document.querySelectorAll('.question').length;
 
 // get the question list element
 const questionList = document.getElementById('question-list');
 
 // add a list item for each question
-for (let i = 1; i <= totalPages; i++) {
-  const li = document.createElement('li');
-  li.textContent = 'Q. ' + i;
-  questionList.appendChild(li);
+for (let i = 1; i <= 10; i++) {
+    const li = document.createElement('li');
+    li.textContent = 'Q. ' + i;
+    questionList.appendChild(li);
 }
+
 
 // get the selected options from session storage
 let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
@@ -185,43 +146,11 @@ for (let i = 0; i <= listItems.length; i++) {
   // check if the question has been answered
   if (selectedOptions.hasOwnProperty(questionNumber)) {
     // add a green tick mark to indicate that the question has been answered
-    li.innerHTML += ' .✅';
+    li.innerHTML += '  .✅';
   } else {
     // add a red cross mark to indicate that the question has been skipped
-    li.innerHTML += ' .⬜';
+    li.innerHTML += '  .⬜';
   }
 }
 
 
-
-
-
-<!-- add the script just before the closing </body> tag -->
- // clear the session storage when the exam is submitted
- document.getElementById('question-form').addEventListener('submit', function() {
-   sessionStorage.clear();
- });
-
-
-  // clear the session storage when a new user starts the exam
-  *//*window.addEventListener('load', function() {
-    sessionStorage.clear();
-  });*/
-
-
- /*function storeSelectedOptions() {
-
-          let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
-          let questionIds = document.querySelectorAll("input[name='questionIds[]']");
-          console.log('questionIds', questionIds);
-          for (let i = 0; i < questionIds.length; i++) {
-            let questionId = questionIds[i].value;
-            let selectedOption = document.querySelector("input[name='question-" + questionId + "']:checked");
-            if (selectedOption) {
-            selectedOptions[i+1] = {
-                id: questionId,
-                value: selectedOption.value
-            }
-              //selectedOptions[questionId] = selectedOption.value;
-            }
-          }*/
