@@ -140,53 +140,20 @@ for (let i = 1; i <= totalQuestions; i++) {
 // Get the list items in the question list
 const listItems = document.querySelectorAll('#question-list li');
 
-// Iterate through the list items
-for (let i = 0; i < listItems.length; i++) {
-  const li = listItems[i];
-  const questionNumber = i + 1;
+// Update the tick mark for each question
+listItems.forEach((li, index) => {
+  const questionNumber = index + 1;
 
   // Check if the question has been answered
   if (selectedOptions.hasOwnProperty(questionNumber)) {
     // Add a green tick mark to indicate that the question has been answered
-    li.innerHTML = 'Q. ' + questionNumber + '  .✅';
+    li.innerHTML = 'Q. ' + questionNumber + ' <span class="tick-mark">⬜</span>';
   } else {
     // Add a blank square for unanswered questions
-    li.innerHTML = 'Q. ' + questionNumber + '  .⬜';
+    li.innerHTML = 'Q. ' + questionNumber + ' <span class="blank-square">✅</span>';
   }
-}
+});
 
-// Store the selected option when an option is selected
-const questionInputs = document.querySelectorAll('input[type="radio"][name^="question-"]');
-for (let i = 0; i < questionInputs.length; i++) {
-  const input = questionInputs[i];
-
-  input.addEventListener('change', function() {
-    const questionId = input.name.split('-')[1];
-    const selectedOption = input.value;
-
-    // Update the selectedOptions object in session storage
-    selectedOptions[questionId] = selectedOption;
-    sessionStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
-
-    // Update the tick mark for the selected question in the question list
-    const questionIndex = questionId - 1;
-    const questionListItem = listItems[questionIndex];
-
-    if (questionListItem) {
-      // Remove the existing tick mark or blank square
-      questionListItem.innerHTML = 'Q. ' + questionId;
-
-      // Check if the question has been answered
-      if (selectedOptions.hasOwnProperty(questionId)) {
-        // Add a green tick mark
-        questionListItem.innerHTML += '  .✅';
-      } else {
-        // Add a blank square
-        questionListItem.innerHTML += '  .⬜';
-      }
-    }
-  });
-}
 
 
 
