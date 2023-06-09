@@ -209,7 +209,7 @@ public class AdminController {
         // Add a success flash attribute
         redirectAttributes.addFlashAttribute("successMessage", "Student deleted successfully.");
 
-        return "redirect:/admin/user-list";
+        return "admin/user-list";
     }
 
 

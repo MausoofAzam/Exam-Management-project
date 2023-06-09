@@ -230,6 +230,11 @@ public class UserController {
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("totalPages", questionPage.getTotalPages());
         System.out.println("UserId : "+userId+ ":Page number : "+pageNumber+ " :total pages :"+questionPage.getTotalPages());
+        if(user!=null && !user.isHasAssignedQuestions()){
+            return "normal/not_assigned";
+        }
+
+
         if (user.getScore()>0){
             int score= user.getScore();
             model.addAttribute("score",score);

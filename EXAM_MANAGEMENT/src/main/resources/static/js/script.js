@@ -117,7 +117,6 @@ const timer = setInterval(() => {
 
 
 
-
 // get the total number of questions
 const totalQuestions = document.querySelectorAll('.question').length;
 
@@ -154,3 +153,43 @@ for (let i = 0; i <= listItems.length; i++) {
 }
 
 
+/*
+function updateTickMarks(selectedOptions) {
+const totalQuestions = Object.keys(selectedOptions).length;
+
+const questionList = document.getElementById('question-list');
+
+questionList.innerHTML = '';
+
+// Add a list item for each question
+for (let i = 1; i <= totalQuestions; i++) {
+const li = document.createElement('li');
+li.textContent = 'Q. ' + i;
+
+// Check if the question has been answered
+if (selectedOptions.hasOwnProperty(i)) {
+// Add a green tick mark to indicate that the question has been answered
+li.innerHTML += ' <span class="tick-mark">✅</span>';
+} else {
+// Add a blank square for unanswered questions
+li.innerHTML += ' <span class="blank-square">⬜</span>';
+}
+
+questionList.appendChild(li);
+}
+}
+
+// AJAX request in the exam page retrieves session storage data
+// Pass the session storage data to the updateTickMarks function
+$(document).ready(function() {
+$.ajax({
+url: '/retrieve-session-data',
+method: 'GET',
+success: function(response) {
+updateTickMarks(response.selectedOptions);
+},
+error: function(error) {
+console.error('Failed to retrieve session data:', error);
+}
+});
+});*/

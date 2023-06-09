@@ -16,7 +16,7 @@
 
       <div class="questions">
         <div class="question" th:each="question, questionIndex : ${questions.content}">
-          <h2><span th:text="${(pageNumber - 1) * questions.size + questionIndex.index + 1}"></span>. <span th:text="${question.questionType}"></span></h2>
+          <h3><span th:text="${(pageNumber - 1) * questions.size + questionIndex.index + 1}"></span>. <span th:text="${question.questionType}"></span></h3>
 
           <input type="hidden" name="questionIds[]" th:value="${question.id}">
 

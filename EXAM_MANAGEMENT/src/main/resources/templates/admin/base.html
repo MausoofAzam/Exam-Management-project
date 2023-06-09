@@ -34,7 +34,7 @@
 <!-- This is navbar -->
 
 <nav class="fixed-top navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#"><b>EXAM MANAGEMENT
+    <a class="navbar-brand" href="#"><b>E-Exam
     </b></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -71,10 +71,9 @@
 <div class="sidebar mt-2">
     <span onclick="toggleSidebar()" class="crossBtn">&times;</span> <a
         id="home-link" th:href="@{/admin/index}" class="item">
-    <i class="fa-solid fa-house-user"></i>Admin Home</a>
+    <i class="fa-solid fa-house-user"></i>&ensp;Admin Home</a>
 
-    <a id="uploading-link" th:href="@{/admin/uploadQuestionPage}" class="item">
-        <i class="fa-solid fa-upload"></i> Upload Question </a>
+
 
 
     <!--<a id="setting-link" th:href="@{/admin/createQuestion}" class="item">
@@ -82,16 +81,19 @@
 
 
     <a id="user-link" th:href="@{/admin/show-users}" class="item">
-        <i class="fa-solid fa-list"></i>List Of Candidate</a>
+        <i class="fa-solid fa-list"></i>&ensp;List Of Candidate</a>
+
+    <a id="uploading-link" th:href="@{/admin/uploadQuestionPage}" class="item">
+        <i class="fa-solid fa-upload"></i>&ensp;Upload Question </a>
 
 
     <a id="add-link" th:href="@{/admin/add-contact}" class="item"><i
-            class="fa-solid fa-pen"></i>Create your Contacts</a>
+            class="fa-solid fa-pen"></i>&ensp;Add Contact</a>
 
-    <a id="notice-link" th:href="@{/admin/notice}" class="item">Add Notice</a>
+    <a id="notice-link" th:href="@{/admin/notice}" class="item">&ensp;Add Notice</a>
 
     <a id="contact-link" th:href="@{/admin/show-contacts}" class="item">
-        <i class="fa-solid fa-address-book"></i> Admin Contacts</a>
+        <i class="fa-solid fa-address-book"></i>&ensp;Saved Contacts</a>
 
 
     <!--<a id="add-link" th:href="@{/user/add-contact}" class="item"><i
@@ -101,8 +103,8 @@
           class="fa-solid fa-user"></i>Your Profile</a>-->
 
 
-    <a th:href="@{/logout}" class="item"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
-    <div class="divider"></div>
+    <!--<a th:href="@{/logout}" class="item"><i class="fa-solid fa-right-from-bracket"></i>&ensp;Logout</a>
+    <div class="divider"></div>-->
 </div>
 <div class="content mt-5">
     <i onclick="toggleSidebar()" class="fas fa-bars m-3"></i>
