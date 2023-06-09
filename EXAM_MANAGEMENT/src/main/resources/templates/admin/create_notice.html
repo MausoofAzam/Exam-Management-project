@@ -2,19 +2,19 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/base::layout(~{::section})">
 <head>
   <meta charset="UTF-8">
-  <title>Create Notice</title>
-
+  <title align="center">Post Notice</title>
 </head>
 <body>
 <section>
-  <div th:if="${successMessage}" class="alert-success" th:text="${successMessage}"></div>
+  <div id="notice-section">
+    <div th:if="${successMessage}" class="alert-success" th:text="${successMessage}"></div>
 
-  <form action="/admin/createNotice" method="post">
-    <h1>Create Notice</h1>
-    <input type="text" placeholder="Enter Notice Here" id="messages" name="messages">
-    <button type="submit" class="btn btn-info">Post Notice</button>
-  </form>
-
+    <form action="/admin/createNotice" method="post">
+      <h1>Create Notice</h1>
+      <textarea placeholder="Enter Notice Here" id="messages" name="messages"></textarea><br>
+      <button type="submit" class="btn btn-info">Post Notice</button>
+    </form>
+  </div>
 </section>
 </body>
 </html>

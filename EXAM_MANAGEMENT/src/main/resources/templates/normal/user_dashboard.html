@@ -4,22 +4,22 @@
 <head>
     <meta charset="ISO-8859-1">
     <title th:text="${title}"></title>
+    <link rel="stylesheet" href="path/to/your/stylesheet.css">
 </head>
 <body>
 
 <section>
-    <div    >
-        <h3 align="center">This is Student Home Page</h3>
-<!--        <h3 align="center"> Here you can add contact you want </h3>-->
+    <div id="student-home">
+        <p>Welcome Student, here you can add contacts and perform exams. Use the buttons below to navigate to the appropriate pages.</p>
 
-        <div align="center">
-            <a id="user-link"  th:href="@{/user/add-contact}" >
+        <div>
+            <a id="user-link" th:href="@{/user/add-contact}">
                 Add Contact</a>
 
         </div>
-        <div align="center">
-            <a id="user-links"  th:href="@{/user/start}" >
-               Perform Exam</a>
+        <div>
+            <a id="user-links" th:href="@{/user/start}">
+                Perform Exam</a>
 
         </div>
 

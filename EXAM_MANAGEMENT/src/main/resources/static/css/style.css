@@ -4,7 +4,7 @@ body {
 }
 
 .bg-primary {
-	background: #0f7484  !important;
+	background: #17a2b8 !important;
 }
 
 .banner {
@@ -56,7 +56,7 @@ body {
 
 .sidebar {
 	width: 18%;
-	background: #13a699;
+	background: #ebedf0;
 	height: 100%;
 	position: fixed;
 	padding-top: 45px;
@@ -209,5 +209,106 @@ body {
     }
 
 
+
+#upload-section {
+  margin: 0 auto;
+  width: 70%;
+  padding: 20px;
+  background-color: #f2f2f2;
+}
+
+#notice-section textarea {
+  width: 80%;
+  height: 100px;
+  padding: 10px;
+}
+#notice-section form {
+  text-align: auto;
+}
+
+
+
+
+
+#notice-table {
+  margin: 20px;
+  padding: 20px;
+}
+
+#notice-table table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#notice-table table, #notice-table th, #notice-table td {
+  border: 1px solid black;
+}
+
+#notice-table th, #notice-table td {
+  padding: 10px;
+}
+
+#notice-table th {
+  text-align: left;
+}
+
+#notice-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+
+#admin-dashboard {
+  margin: 20px;
+  padding: 20px;
+}
+
+#admin-dashboard h3 {
+  font-size: 24px;
+}
+
+#admin-dashboard p {
+  font-size: 18px;
+}
+
+#admin-dashboard a {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #17a2b8;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
+}
+
+
+#student-home {
+  margin: 20px;
+  padding: 20px;
+  text-align: center;
+}
+
+#student-home h3 {
+  font-size: 24px;
+}
+
+#student-home div {
+  margin: 10px;
+}
+
+#student-home a {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
+}
+
+#student-home a:hover {
+  background-color: #3e8e41;
+}
+
+#student-home p {
+  font-size: 18px;
+}
 
 

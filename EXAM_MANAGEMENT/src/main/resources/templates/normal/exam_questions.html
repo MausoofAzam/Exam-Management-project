@@ -1,68 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="normal/exam_base::layout(~{::section})">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/base::layout(~{::section})">
 <head>
   <meta charset="ISO-8859-1">
-  <title th:text="${title}">Success</title>
-
+  <title th:text="${title}"></title>
 </head>
-
 <body>
 
 <section>
+  <div id="upload-section">
+    <h2>Please upload an Excel file containing questions here</h2>
+    <form action="#" th:action="@{/admin/sheet/upload}" method="post" enctype="multipart/form-data">
+      <label for="excel_file">Select an Excel File:</label>
+      <input type="file" name="file" id="excel_file" /><br />
 
-  <div class="container">
-    <!-- display the current question -->
-    <form id="question-form" th:action="@{/user/calculate-score}" method="post">
+      <div th:if="${successMessage}" style="color: green;">File uploaded successfully!</div>
+      <div th:if="${errorMessage}" style="color: red;">Please upload an Excel file.</div>
 
-      <div class="questions">
-        <div class="question" th:each="question, questionIndex : ${questions.content}">
-          <h3><span th:text="${(pageNumber - 1) * questions.size + questionIndex.index + 1}"></span>. <span th:text="${question.questionType}"></span></h3>
+      <!--    <button type="submit">Save</button>-->
+      <button type="submit" class="btn btn-info">Upload Now</button>
+      <!--    <button type="reset">Reset</button>-->
+      <button type="reset" class="btn btn-info">Reset</button>
 
-          <input type="hidden" name="questionIds[]" th:value="${question.id}">
-
-          <div class="option">
-            <input type="radio" th:id="${'option1-' + question.id}" th:name="${'question-' + question.id}" th:value="${question.option1}">
-            <label th:for="${'option1-' + question.id}" th:text="${question.option1}"></label>
-          </div>
-          <div class="option">
-            <input type="radio" th:id="${'option2-' + question.id}" th:name="${'question-' + question.id}" th:value="${question.option2}">
-            <label th:for="${'option2-' + question.id}" th:text="${question.option2}"></label>
-          </div>
-          <div class="option">
-            <input type="radio" th:id="${'option3-' + question.id}" th:name="${'question-' + question.id}" th:value="${question.option3}">
-            <label th:for="${'option3-' + question.id}" th:text="${question.option3}"></label>
-          </div>
-          <div class="option">
-            <input type="radio" th:id="${'option4-' + question.id}" th:name="${'question-' + question.id}" th:value="${question.option4}">
-            <label th:for="${'option4-' + question.id}" th:text="${question.option4}"></label>
-          </div>
-        </div>
-
-        <!-- display the navigation buttons -->
-        <div class="button-container">
-          <div th:if="${pageNumber > 1}">
-            <a th:href="@{/user/assigned-question(pageNumber=${pageNumber - 1})}" class="btn btn-info btn-sm">Previous</a>
-          </div>
-
-          <div th:if="${pageNumber < totalPages}">
-            <a id="next-button" th:href="@{/user/assigned-question(pageNumber=${pageNumber + 1})}" class="btn btn-info btn-sm">Next</a>
-          </div>
-        </div>
-
-        <!-- Submit button -->
-        <div class="submit" align="center" th:if="${questions.last}">
-          <button type="submit" class="btn btn-info btn-lg btn-block">Submit</button>
-        </div>
-
-        <div class="selected-info">
-          <h5 hidden="hidden">UserId: <span th:text="${userId}"></span></h5>
-          <h5>Question <span th:text="${pageNumber}"></span> of <span th:text="${totalPages}"></span></h5>
-        </div>
-      </div>
-
+      <a href="/admin/index" class="btn btn-info">Home</a>
     </form>
-    
   </div>
 </section>
+
 </body>
 </html>
