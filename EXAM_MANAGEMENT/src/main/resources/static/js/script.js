@@ -120,16 +120,6 @@ const timer = setInterval(() => {
 
 
 
-// get the total number of questions
-const totalQuestions = document.querySelectorAll('.question').length;
-
-   // Get the question list element
-    const questionList = document.getElementById('question-list');
-
-    // Create a new XMLHttpRequest object
-    var xhr = new XMLHttpRequest();
-
-
 // Retrieve the user ID from the HTML page
 const userIdElement = document.querySelector('.selected-info h5 span');
 const userId = userIdElement.textContent;
@@ -139,35 +129,37 @@ fetch(`/user/get-question-ids?userId=${userId}`)
   .then(response => response.json())
   .then(data => {
     const idlist = data;
+    const questionList = document.getElementById('question-list');
     for (let i = 0; i < idlist.length; i++) {
       const li = document.createElement('li');
-      li.textContent = 'Q. ' + idlist[i];
+      li.setAttribute('data-question-id', idlist[i]);
+      li.textContent = 'Q. ' + (i + 1);
       questionList.appendChild(li);
+    }
+
+    // get the selected options from session storage
+    let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+
+    // get the list items in the question list
+    let listItems = document.querySelectorAll('#question-list li');
+
+    // iterate through the list items
+    for (let i = 0; i < listItems.length; i++) {
+      let li = listItems[i];
+
+      // retrieve the question ID from the data-question-id attribute
+      let questionId = li.getAttribute('data-question-id');
+
+      // check if the question has been answered
+      if (selectedOptions.hasOwnProperty(questionId)) {
+        // add a green tick mark to indicate that the question has been answered
+        li.innerHTML += '  .✅';
+      } else {
+        // add a red cross mark to indicate that the question has been skipped
+        li.innerHTML += '  .⬜';
+      }
     }
   });
 
-
-// get the selected options from session storage
-let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
-
-// get the list items in the question list
-let listItems = document.querySelectorAll('#question-list li');
-
-// iterate through the list items
-for (let i = 0; i < listItems.length; i++) {
-  let li = listItems[i];
-
-  // retrieve the question ID from the data-question-id attribute
-  let questionId = li.getAttribute('data-question-id');
-
-  // check if the question has been answered
-  if (selectedOptions.hasOwnProperty(questionId)) {
-    // add a green tick mark to indicate that the question has been answered
-    li.innerHTML += '  .✅';
-  } else {
-    // add a red cross mark to indicate that the question has been skipped
-    li.innerHTML += '  .⬜';
-  }
-}
 
 
