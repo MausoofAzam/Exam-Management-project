@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -245,6 +246,20 @@ public class UserController {
         return "normal/exam_questions";
     }
 
+    @GetMapping("/get-question-ids")
+    @ResponseBody
+    public List<Long> getQuestionIds(@RequestParam int userId) {
+        // Retrieve the assigned questions for the specified user
+        List<UserQuestion> userQuestions = userQuestionRepository.findByUserId(userId);
+
+        // Extract the question IDs from the assigned questions
+        List<Long> questionIds = userQuestions.stream()
+                .map(UserQuestion::getQuestionId)
+                .collect(Collectors.toList());
+        System.out.println("questionIds : "+questionIds);
+        // Return the list of question IDs
+        return questionIds;
+    }
 
     @PostMapping("/calculate-score")
     public String calculateScore(Principal principal,

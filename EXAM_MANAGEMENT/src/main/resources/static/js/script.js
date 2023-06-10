@@ -1,3 +1,5 @@
+
+
 console.log("This is Script File")
 
 
@@ -117,18 +119,32 @@ const timer = setInterval(() => {
 
 
 
+
 // get the total number of questions
 const totalQuestions = document.querySelectorAll('.question').length;
 
-// get the question list element
-const questionList = document.getElementById('question-list');
+   // Get the question list element
+    const questionList = document.getElementById('question-list');
 
-// add a list item for each question
-for (let i = 1; i <= 10; i++) {
-    const li = document.createElement('li');
-    li.textContent = 'Q. ' + i;
-    questionList.appendChild(li);
-}
+    // Create a new XMLHttpRequest object
+    var xhr = new XMLHttpRequest();
+
+
+// Retrieve the user ID from the HTML page
+const userIdElement = document.querySelector('.selected-info h5 span');
+const userId = userIdElement.textContent;
+
+// Make the AJAX call to the server to retrieve the question IDs
+fetch(`/user/get-question-ids?userId=${userId}`)
+  .then(response => response.json())
+  .then(data => {
+    const idlist = data;
+    for (let i = 0; i < idlist.length; i++) {
+      const li = document.createElement('li');
+      li.textContent = 'Q. ' + idlist[i];
+      questionList.appendChild(li);
+    }
+  });
 
 
 // get the selected options from session storage
@@ -138,12 +154,14 @@ let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {
 let listItems = document.querySelectorAll('#question-list li');
 
 // iterate through the list items
-for (let i = 0; i <= listItems.length; i++) {
+for (let i = 0; i < listItems.length; i++) {
   let li = listItems[i];
-  let questionNumber = i + 1;
+
+  // retrieve the question ID from the data-question-id attribute
+  let questionId = li.getAttribute('data-question-id');
 
   // check if the question has been answered
-  if (selectedOptions.hasOwnProperty(questionNumber)) {
+  if (selectedOptions.hasOwnProperty(questionId)) {
     // add a green tick mark to indicate that the question has been answered
     li.innerHTML += '  .✅';
   } else {
@@ -153,43 +171,3 @@ for (let i = 0; i <= listItems.length; i++) {
 }
 
 
-/*
-function updateTickMarks(selectedOptions) {
-const totalQuestions = Object.keys(selectedOptions).length;
-
-const questionList = document.getElementById('question-list');
-
-questionList.innerHTML = '';
-
-// Add a list item for each question
-for (let i = 1; i <= totalQuestions; i++) {
-const li = document.createElement('li');
-li.textContent = 'Q. ' + i;
-
-// Check if the question has been answered
-if (selectedOptions.hasOwnProperty(i)) {
-// Add a green tick mark to indicate that the question has been answered
-li.innerHTML += ' <span class="tick-mark">✅</span>';
-} else {
-// Add a blank square for unanswered questions
-li.innerHTML += ' <span class="blank-square">⬜</span>';
-}
-
-questionList.appendChild(li);
-}
-}
-
-// AJAX request in the exam page retrieves session storage data
-// Pass the session storage data to the updateTickMarks function
-$(document).ready(function() {
-$.ajax({
-url: '/retrieve-session-data',
-method: 'GET',
-success: function(response) {
-updateTickMarks(response.selectedOptions);
-},
-error: function(error) {
-console.error('Failed to retrieve session data:', error);
-}
-});
-});*/
