@@ -7,21 +7,27 @@
 </head>
 <body>
 
+<body>
 <section>
     <div id="student-home">
-        <p>Welcome Student, here you can add contacts and perform exams. Use the buttons below to navigate to the appropriate pages.</p>
+            <p>Welcome, <span th:text="${#strings.capitalize(user.name)} + ','" style="font-weight: bold;"></span>
+                This is your personalized student home page where you can manage your contacts and take exams. Whether you need to stay connected with fellow students or test your knowledge, this is the place to be.</p>
 
-        <div>
+            <p>Adding contacts is a great way to expand your network and collaborate with your peers. Use the "Add Contact" button to easily add new contacts and keep track of your connections.</p>
+
+            <p>Ready to put your knowledge to the test? Click on the "Perform Exam" button to challenge yourself with our comprehensive exams. Sharpen your skills, review important topics, and monitor your progress as you strive for academic excellence.</p>
+
+            <p>Feel free to explore the various features and resources available on this platform. We aim to provide you with a seamless learning experience and a vibrant community to support your educational journey.</p>
+
+            <p>Thank you for being a part of our student community. We wish you success and enjoyment in your studies!</p>
+        <div class="button-container">
             <a id="user-link" th:href="@{/user/add-contact}">
-                Add Contact</a>
-
-        </div>
-        <div>
+                Add Contact
+            </a>
             <a id="user-links" th:href="@{/user/start}">
-                Perform Exam</a>
-
+                Perform Exam
+            </a>
         </div>
-
     </div>
 </section>
 

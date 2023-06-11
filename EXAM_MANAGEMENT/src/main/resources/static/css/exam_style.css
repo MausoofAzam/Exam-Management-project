@@ -65,8 +65,11 @@
 }
 
 .sidebar li {
-    margin-bottom: 10px;
+    display: block;
+    margin-bottom: 5px;
 }
+
+
 #timer {
     position: absolute;
     top: 10px;
@@ -102,4 +105,6 @@
   margin-right:5px;
   margin-top:25px;
 }
+
+
 

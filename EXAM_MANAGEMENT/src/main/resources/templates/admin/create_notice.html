@@ -20,8 +20,9 @@
     <h3 align="center">All Notices:</h3>
     <div th:each="notice : ${allNotices}">
       <div class="notice">
-        <div class="notice-message" th:text="${notice.messages}"></div>
         <div class="notice-date" th:text="${notice.createdDate}"></div>
+
+        <div class="notice-message" th:text="${notice.messages}"></div>
       </div>
     </div>
   </div>

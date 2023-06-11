@@ -21,7 +21,7 @@
         </div>-->
 
           <h3 class="mt-3" align="center">
-            <span th:text="${user.name}"></span>
+            <span th:text="${#strings.capitalize(user.name)}" style="font-weight: bold;"></span>
           </h3>
 
         <div class="table-responsive">

@@ -281,35 +281,34 @@ body {
 
 
 #student-home {
-  margin: 20px;
   padding: 20px;
-  text-align: center;
+  margin: 20px;
 }
 
-#student-home h3 {
-  font-size: 24px;
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 
-#student-home div {
+.button-container a {
   margin: 10px;
-}
-
-#student-home a {
-  display: inline-block;
   padding: 10px 20px;
-  background-color: #4CAF50;
+  background-color: #17a2b8;
   border-radius: 5px;
   color: white;
   text-decoration: none;
 }
 
-#student-home a:hover {
+.button-container a:hover {
   background-color: #3e8e41;
 }
 
-#student-home p {
+p {
   font-size: 18px;
+  margin-bottom: 10px;
 }
+
 .notice {
   background-color: lightblue;
   padding: 10px;
