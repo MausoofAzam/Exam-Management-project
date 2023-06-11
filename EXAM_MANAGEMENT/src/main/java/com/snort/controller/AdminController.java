@@ -343,8 +343,12 @@ public class AdminController {
 
         // Get the name from the user object
         String createdBy = user.getName();
+        if (messages == null || messages.isEmpty()) {
+            // Add error message to the model
+            model.addAttribute("errorMessage", "Notice message cannot be empty!");
+            return "admin/create_notice";
+        }
 
-        // Create a new Notice object
         Notice notice = new Notice();
         notice.setMessages(messages);
         notice.setCreatedDate(createdDate);
@@ -352,11 +356,15 @@ public class AdminController {
 
         noticeRepository.save(notice);
 
-        // Add success message to the model
+        List<Notice> allNotices = noticeRepository.findAll();
+
+        // Add success message and all notices to the model
         model.addAttribute("successMessage", "Notice created successfully!");
+        model.addAttribute("allNotices", allNotices);
 
         return "admin/create_notice";
     }
+
 
 
 

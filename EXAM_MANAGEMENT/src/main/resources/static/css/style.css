@@ -310,5 +310,11 @@ body {
 #student-home p {
   font-size: 18px;
 }
+.notice {
+  background-color: lightblue;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
 
 
