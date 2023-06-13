@@ -29,9 +29,12 @@
                   th:for="${'option4-' + question.id}" th:text="${question.option4}"></label> </div>
         </div> <!-- display the navigation buttons -->
         <div class="button-container">
-          <div th:if="${pageNumber > 1}"> <a
-                  th:href="@{/user/assigned-question(pageNumber=${pageNumber - 1})}"
-                  class="btn btn-info btn-sm">Previous</a> </div>
+          <div th:if="${pageNumber > 1}">
+            <a th:href="@{/user/assigned-question(pageNumber=${pageNumber - 1})}" class="btn btn-info btn-sm" id="previous-button" onclick="unselectAnswer()">Previous</a>
+          </div>
+
+
+
           <div th:if="${pageNumber < totalPages}"> <a id="next-button"
                                                       th:href="@{/user/assigned-question(pageNumber=${pageNumber + 1})}"
                                                       class="btn btn-info btn-sm">Next</a> </div>

@@ -118,8 +118,6 @@ const timer = setInterval(() => {
 }, 1000);
 
 
-
-
 // Retrieve the user ID from the HTML page
 const userIdElement = document.querySelector('.selected-info h5 span');
 const userId = userIdElement.textContent;
@@ -160,6 +158,40 @@ fetch(`/user/get-question-ids?userId=${userId}`)
       }
     }
   });
+ /* // Define a function that resets all of the user's selected options
+  function resetSelectedOptions() {
+    // clear the selected options in session storage
+    sessionStorage.setItem("selectedOptions", JSON.stringify({}));
+
+    // update the display of all tick marks
+    let listItems = document.querySelectorAll('#question-list li');
+    for (let i = 0; i < listItems.length; i++) {
+      let li = listItems[i];
+      li.innerHTML = li.innerHTML.replace('✅', '⬜');
+    }
+  }*/
 
 
+/*// Define a function that unselects the answer to the current question
+function unselectAnswer() {
+  // get the current question ID from the data-question-id attribute of the active list item
+  let activeListItem = document.querySelector('#question-list li.active');
+  let questionId = activeListItem.getAttribute('data-question-id');
 
+  // get the selected options from session storage
+  let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+
+  // remove the selected option for the current question
+  delete selectedOptions[questionId];
+console.log("questionId",questionId);
+  // update session storage
+  sessionStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
+console.log("selectedOptions" ,selectedOptions);
+  // update the display of the tick mark for the current question
+  activeListItem.innerHTML = activeListItem.innerHTML.replace('✅', '⬜');
+}*/
+
+   /*<div th:if="${pageNumber > 1}">
+            <a th:href="@{/user/assigned-question(pageNumber=${pageNumber - 1})}" class="btn btn-info btn-sm" id="previous-button" onclick="unselectAnswer()">Previous</a>
+          </div>
+*/
