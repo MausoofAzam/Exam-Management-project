@@ -174,47 +174,30 @@ fetch(`/user/get-question-ids?userId=${userId}`)
     }
   });
 
-
-
-function handlePreviousButtonClick() {
-  storeSelectedOptions();
-  let currentQuestionId = document.querySelector('.selected-info h5 span').textContent;
-  unselectTickMark(currentQuestionId);
+function unselectCheckbox() {
+  let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+  let questionIds = document.querySelectorAll("input[name='questionIds[]']");
+  for (let i = 0; i < questionIds.length; i++) {
+    let questionId = questionIds[i].value;
+    if (selectedOptions.hasOwnProperty(questionId)) {
+      delete selectedOptions[questionId];
+      let optionElement = document.querySelector("input[name='question-" + questionId + "']:checked");
+      if (optionElement) {
+        optionElement.checked = false;
+      }
+    }
+  }
+  sessionStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
 }
 
+// Unselect the checkbox when clicking the previous button
 if (document.getElementById("previous-button")) {
   document.getElementById("previous-button").addEventListener("click", function(event) {
     event.preventDefault();
-    storeSelectedOptions();
-    let currentQuestionId = document.querySelector('.selected-info h5 span').textContent;
-    unselectTickMark(currentQuestionId);
+    unselectCheckbox();
     window.location.href = this.href;
   });
 }
 
 
-function unselectTickMark() {
-  console.log('unselectTickMark called');
-// select option get list
-var selectedoption=JSON.parse(sessionStorage.getItem("selectedOptions"))
-console.log(selectedoption);
 
-// find question id , which you have to delete
-//let questionIds = document.querySelectorAll("input[name='questionIds[]']");
-//console.log(questionIds)
-
-// letsay question id 35
-var deletdvariable=35
-delete selectedoption[deletdvariable];
-
-
-
-sessionStorage.setItem("selectedOptions",JSON.stringify(selectedoption))
-
-
-  // get the list items in the question list
-  let listItems = document.querySelectorAll('#question-list li');
-  let li = listItems[1];
-  let checkbox = li.querySelector('input[type="checkbox"]');
-  checkbox.checked = false;
-}
