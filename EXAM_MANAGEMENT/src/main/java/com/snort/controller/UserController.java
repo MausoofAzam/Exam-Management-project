@@ -211,40 +211,40 @@ public class UserController {
     }
 
     /*here this handler will give assigned questions to the student*/
-    @GetMapping("/assigned-question")
-    public String getAssignedQuestion(Principal principal,
-                                      @RequestParam(required = false, name = "category") String category,
-                                      @RequestParam(required = false, name = "level") String level,
-                                      @RequestParam(required = false, name = "setNumber") Integer setNumber,
-                                      @RequestParam(defaultValue = "1") int pageNumber,
-                                      Model model) {
-        String email = principal.getName();
-        User user = userRepository.findByEmail(email);
-        /*to display the name in front-end after completed the exam*/
-        String userName = user.getName();
+        @GetMapping("/assigned-question")
+        public String getAssignedQuestion(Principal principal,
+                                          @RequestParam(required = false, name = "category") String category,
+                                          @RequestParam(required = false, name = "level") String level,
+                                          @RequestParam(required = false, name = "setNumber") Integer setNumber,
+                                          @RequestParam(defaultValue = "1") int pageNumber,
+                                          Model model) {
+            String email = principal.getName();
+            User user = userRepository.findByEmail(email);
+            /*to display the name in front-end after completed the exam*/
+            String userName = user.getName();
 
-        int userId = user.getId();
-        Pageable pageable = PageRequest.of(pageNumber-1,1);
-        Page<Question> questionPage = userQuestionService.getAssignedQuestion(userId, pageable);
-        model.addAttribute("userId", userId);
-        model.addAttribute("questions", questionPage);
-        model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("totalPages", questionPage.getTotalPages());
-        System.out.println("UserId : "+userId+ ":Page number : "+pageNumber+ " :total pages :"+questionPage.getTotalPages());
-        if(user!=null && !user.isHasAssignedQuestions()){
-            return "normal/not_assigned";
+            int userId = user.getId();
+            Pageable pageable = PageRequest.of(pageNumber-1,1);
+            Page<Question> questionPage = userQuestionService.getAssignedQuestion(userId, pageable);
+            model.addAttribute("userId", userId);
+            model.addAttribute("questions", questionPage);
+            model.addAttribute("pageNumber", pageNumber);
+            model.addAttribute("totalPages", questionPage.getTotalPages());
+            System.out.println("UserId : "+userId+ ":Page number : "+pageNumber+ " :total pages :"+questionPage.getTotalPages());
+            if(user!=null && !user.isHasAssignedQuestions()){
+                return "normal/not_assigned";
+            }
+
+
+            if (user.getScore()>0){
+                int score= user.getScore();
+                model.addAttribute("score",score);
+                model.addAttribute("name",userName);
+                return "normal/exam_completed";
+            }
+
+            return "normal/exam_questions";
         }
-
-
-        if (user.getScore()>0){
-            int score= user.getScore();
-            model.addAttribute("score",score);
-            model.addAttribute("name",userName);
-            return "normal/exam_completed";
-        }
-
-        return "normal/exam_questions";
-    }
 
     @GetMapping("/get-question-ids")
     @ResponseBody
