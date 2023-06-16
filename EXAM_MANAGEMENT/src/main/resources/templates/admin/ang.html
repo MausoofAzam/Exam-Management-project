@@ -1,461 +1,203 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Software Engineer Portfolio</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    /* Additional custom styles can be added here */
-  </style>
-</head>
 
-<body class="bg-gray-100 text-gray-900 font-sans">
-<!-- Header -->
-<header class="bg-white shadow">
-  <div class="container mx-auto px-4">
-    <div class="flex items-center justify-between py-4">
-      <h1 class="text-xl font-semibold">Software Engineer Portfolio</h1>
-      <nav>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#about">About</a>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#experience">Experience</a>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#contact">Contact</a>
-      </nav>
-    </div>
-  </div>
-</header>
+console.log("This is Script File")
 
-<!-- Main Content -->
-<main class="container mx-auto px-4 py-8">
-  <!-- About Section -->
-  <section id="about" class="mb-8">
-    <h2 class="text-2xl font-semibold mb-4">About Me</h2>
-    <p>
-      Hi, I'm John Doe, a software engineer with 3 years of experience in Java development. I have a strong
-      background in designing and developing enterprise-level applications using various frameworks and
-      technologies.
-    </p>
-    <!-- Add more information about yourself if needed -->
-  </section>
 
-  <!-- Experience Section -->
-  <section id="experience" class="mb-8">
-    <h2 class="text-2xl font-semibold mb-4">Experience</h2>
-    <ul>
-      <li class="mb-4">
-        <h3 class="text-lg font-semibold">Software Engineer at Company XYZ</h3>
-        <p class="text-gray-600">2019 - Present</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu magna id lacus dapibus vulputate. Sed
-          nec libero vestibulum, congue risus vel, ultrices risus.
-        </p>
-      </li>
-      <!-- Add more work experiences if needed -->
-    </ul>
-  </section>
+const toggleSidebar = () => {
+if ($(".sidebar").is(":visible")) {
 
-  <!-- Contact Section -->
-  <section id="contact">
-    <h2 class="text-2xl font-semibold mb-4">Contact</h2>
-    <p>
-      Feel free to reach out to me via email or phone:
-      <br>
-      Email: <a class="text-blue-600 hover:underline" href="mailto:john.doe@example.com">john.doe@example.com</a>
-      <br>
-      Phone: <span class="text-blue-600">123-456-7890</span>
-    </p>
-  </section>
-</main>
+$(".sidebar").css("display", "none")
+$(".content").css("margin-left", "0%")
+} else {
+$(".sidebar").css("display", "block")
+$(".content").css("margin-left", "20%")
+}
+};
 
-<!-- Footer -->
-<footer class="bg-gray-200 text-center py-4">
-  <p class="text-sm text-gray-600">© 2023 Software Engineer Portfolio. All rights reserved.</p>
-</footer>
 
-<!-- Scripts -->
-<script src="path/to/your/javascript/file.js"></script>
-</body>
+function storeSelectedOptions() {
 
-</html>
+let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+let questionIds = document.querySelectorAll("input[name='questionIds[]']");
+for (let i = 0; i < questionIds.length; i++) {
+let questionId = questionIds[i].value;
+let selectedOption = document.querySelector("input[name='question-" + questionId + "']:checked");
+if (selectedOption) {
+selectedOptions[questionId] = selectedOption.value;
+}
+}
+sessionStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
+}
+
+// Store the selected options when the next button is clicked
+if(document.getElementById("next-button")){
+document.getElementById("next-button").addEventListener("click", function(event) {
+event.preventDefault();
+storeSelectedOptions();
+window.location.href = this.href;
+});}
+
+// Submit the form with the stored selected options when the last page is reached
+if (document.querySelector(".submit")) {
+
+storeSelectedOptions();
+let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+for (let questionId in selectedOptions) {
+let input = document.createElement("input");
+input.type = "hidden";
+input.name = "question-" + questionId;
+input.value = selectedOptions[questionId];
+document.getElementById("question-form").appendChild(input);
+}
+for (let questionId in selectedOptions) {
+let input = document.createElement("input");
+input.type = "hidden";
+input.name = "questionIds[]";
+input.value = questionId;
+document.getElementById("question-form").appendChild(input);
+}
+
+}
+
+/* function to store the options in storage session*/
+function setSelectedOptions() {
+let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+for (let questionId in selectedOptions) {
+let selectedOption = selectedOptions[questionId];
+let optionElement = document.querySelector("input[name='question-" + questionId + "'][value='" + selectedOption + "']");
+if (optionElement) {
+optionElement.checked = true;
+}
+}
+}
+
+setSelectedOptions();
 
 
 
-// JavaScript file for the portfolio website
 
-// Add your custom JavaScript code here
 
-// Example: Smooth scrolling for anchor links
-document.addEventListener('DOMContentLoaded', function () {
-const anchorLinks = document.querySelectorAll('a[href^="#"]');
-for (let anchorLink of anchorLinks) {
-anchorLink.addEventListener('click', function (e) {
-e.preventDefault();
 
-const targetId = anchorLink.getAttribute('href');
-const targetElement = document.querySelector(targetId);
+const examDuration = 15; // duration of the exam in minutes
+// Check if the end time is stored in session storage
+let endTime = sessionStorage.getItem('endTime');
 
-if (targetElement) {
-window.scrollTo({
-top: targetElement.offsetTop,
-behavior: 'smooth'
-});
+if (endTime) {
+// Parse the end time from session storage
+endTime = new Date(endTime);
+} else {
+// Calculate the end time of the exam
+const now = new Date();
+endTime = new Date(now.getTime() + examDuration * 60000);
+
+// Store the end time in session storage
+sessionStorage.setItem('endTime', endTime);
+}
+
+
+// Update the timer every second
+const timer = setInterval(() => {
+// Calculate the remaining time
+const now = new Date();
+const remainingTime = endTime - now;
+
+// Check if the time is up
+if (remainingTime <= 0) {
+clearInterval(timer);
+document.getElementById("timer").textContent = "Time's up!";
+
+// Automatically submit the exam
+document.getElementById("question-form").submit();
+
+} else {
+// Update the timer display
+const minutes = Math.floor(remainingTime / 60000);
+const seconds = Math.floor((remainingTime % 60000) / 1000);
+document.getElementById("timer").textContent = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+}, 1000);
+
+
+// Retrieve the user ID from the HTML page
+const userIdElement = document.querySelector('.selected-info h5 span');
+const userId = userIdElement.textContent;
+
+// Make the AJAX call to the server to retrieve the question IDs
+fetch(`/user/get-question-ids?userId=${userId}`)
+.then(response => response.json())
+.then(data => {
+const idlist = data;
+const questionList = document.getElementById('question-list');
+for (let i = 0; i < idlist.length; i++) {
+const li = document.createElement('li');
+li.setAttribute('data-question-id', idlist[i]);
+
+// create a span element to hold the question number
+const span = document.createElement('span');
+span.textContent = 'Q. ' + (i + 1);
+li.appendChild(span);
+
+// add a non-breaking space after the question number
+li.innerHTML += ' ';
+
+questionList.appendChild(li);
+}
+
+// get the selected options from session storage
+let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+
+// get the list items in the question list
+let listItems = document.querySelectorAll('#question-list li');
+
+// iterate through the list items
+for (let i = 0; i < listItems.length; i++) {
+let li = listItems[i];
+
+// retrieve the question ID from the data-question-id attribute
+let questionId = li.getAttribute('data-question-id');
+
+// create a checkbox element
+let checkbox = document.createElement('input');
+checkbox.type = 'checkbox';
+
+// check if the question has been answered
+if (selectedOptions.hasOwnProperty(questionId)) {
+// check the checkbox to indicate that the question has been answered
+checkbox.checked = true;
+} else {
+// leave the checkbox unchecked to indicate that the question has been skipped
+checkbox.checked = false;
+}
+
+// append the checkbox to the list item
+li.appendChild(checkbox);
 }
 });
+
+function unselectCheckbox() {
+let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+let questionIds = document.querySelectorAll("input[name='questionIds[]']");
+for (let i = 0; i < questionIds.length; i++) {
+let questionId = questionIds[i].value;
+if (selectedOptions.hasOwnProperty(questionId)) {
+delete selectedOptions[questionId];
+let optionElement = document.querySelector("input[name='question-" + questionId + "']:checked");
+if (optionElement) {
+optionElement.checked = false;
 }
+}
+}
+sessionStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
+}
+
+// Unselect the checkbox when clicking the previous button
+if (document.getElementById("previous-button")) {
+document.getElementById("previous-button").addEventListener("click", function(event) {
+event.preventDefault();
+unselectCheckbox();
+window.location.href = this.href;
 });
+}
 
 
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Software Engineer Portfolio</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    /* Additional custom styles can be added here */
-  </style>
-</head>
-
-<body class="bg-gray-100 text-gray-900 font-sans">
-<!-- Header -->
-<header class="bg-white shadow">
-  <div class="container mx-auto px-4">
-    <div class="flex items-center justify-between py-4">
-      <h1 class="text-xl font-semibold">Software Engineer Portfolio</h1>
-      <nav>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#about">About</a>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#experience">Experience</a>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#projects">Projects</a>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#contact">Contact</a>
-      </nav>
-    </div>
-  </div>
-</header>
-
-<!-- Main Content -->
-<main class="container mx-auto px-4 py-8">
-  <!-- About Section -->
-  <section id="about" class="mb-8">
-    <h2 class="text-2xl font-semibold mb-4">About Me</h2>
-    <p>
-      Hi, I'm John Doe, a software engineer with 3 years of experience in Java development. I have a strong
-      background in designing and developing enterprise-level applications using various frameworks and
-      technologies.
-    </p>
-    <!-- Add more information about yourself if needed -->
-  </section>
-
-  <!-- Experience Section -->
-  <section id="experience" class="mb-8">
-    <h2 class="text-2xl font-semibold mb-4">Experience</h2>
-    <ul>
-      <li class="mb-4">
-        <h3 class="text-lg font-semibold">Software Engineer at Company XYZ</h3>
-        <p class="text-gray-600">2019 - Present</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu magna id lacus dapibus vulputate. Sed
-          nec libero vestibulum, congue risus vel, ultrices risus.
-        </p>
-      </li>
-      <!-- Add more work experiences if needed -->
-    </ul>
-  </section>
-
-  <!-- Projects Section -->
-  <section id="projects" class="mb-8">
-    <h2 class="text-2xl font-semibold mb-4">Projects</h2>
-    <ul>
-      <li class="mb-4">
-        <h3 class="text-lg font-semibold">Project Name 1</h3>
-        <p class="text-gray-600">Java, Spring Boot</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu magna id lacus dapibus vulputate. Sed
-          nec libero vestibulum, congue risus vel, ultrices risus.
-        </p>
-      </li>
-      <li class="mb-4">
-        <h3 class="text-lg font-semibold">Project Name 2</h3>
-        <p class="text-gray-600">Java, Hibernate</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu magna id lacus dapibus vulputate. Sed
-          nec libero vestibulum, congue risus vel, ultrices risus.
-        </p>
-      </li>
-      <!-- Add more projects if needed -->
-    </ul>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact">
-    <h2 class="text-2xl font-semibold mb-4">Contact</h2>
-    <p>
-      Feel free to reach out to me via email or phone:
-      <br>
-      Email: <a class="text-blue-600 hover:underline" href="mailto:john.doe@example.com">john.doe@example.com</a>
-      <br>
-      Phone: <span class="text-blue-600">123-456-7890</span>
-    </p>
-  </section>
-</main>
-
-<!-- Footer -->
-<footer class="bg-gray-200 text-center py-4">
-  <p class="text-sm text-gray-600">© 2023 Software Engineer Portfolio. All rights reserved.</p>
-</footer>
-
-<!-- Scripts -->
-<script src="path/to/your/javascript/file.js"></script>
-</body>
-
-</html>
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Software Engineer Portfolio</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    /* Additional custom styles can be added here */
-  </style>
-</head>
-
-<body class="bg-gray-100 text-gray-900 font-sans">
-<!-- Header -->
-<header class="bg-white shadow">
-  <div class="container mx-auto px-4">
-    <div class="flex items-center justify-between py-4">
-      <h1 class="text-xl font-semibold">Software Engineer Portfolio</h1>
-      <nav>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#about">About</a>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#experience">Experience</a>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#projects">Projects</a>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#contact">Contact</a>
-      </nav>
-    </div>
-  </div>
-</header>
-
-<!-- Main Content -->
-<main class="container mx-auto px-4 py-8">
-  <!-- About Section -->
-  <section id="about" class="mb-8">
-    <h2 class="text-2xl font-semibold mb-4">About Me</h2>
-    <p>
-      Hi, I'm John Doe, a software engineer with 3 years of experience in Java development. I have a strong
-      background in designing and developing enterprise-level applications using various frameworks and
-      technologies.
-    </p>
-    <!-- Add more information about yourself if needed -->
-  </section>
-
-  <!-- Experience Section -->
-  <section id="experience" class="mb-8">
-    <h2 class="text-2xl font-semibold mb-4">Experience</h2>
-    <ul>
-      <li class="mb-4">
-        <h3 class="text-lg font-semibold">Software Engineer at Company XYZ</h3>
-        <p class="text-gray-600">2019 - Present</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu magna id lacus dapibus vulputate. Sed
-          nec libero vestibulum, congue risus vel, ultrices risus.
-        </p>
-      </li>
-      <!-- Add more work experiences if needed -->
-    </ul>
-  </section>
-
-  <!-- Projects Section -->
-  <section id="projects" class="mb-8">
-    <h2 class="text-2xl font-semibold mb-4">Projects</h2>
-    <ul>
-      <li class="mb-4">
-        <h3 class="text-lg font-semibold">Project Name 1</h3>
-        <p class="text-gray-600">Java, Spring Boot</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu magna id lacus dapibus vulputate. Sed
-          nec libero vestibulum, congue risus vel, ultrices risus.
-        </p>
-      </li>
-      <li class="mb-4">
-        <h3 class="text-lg font-semibold">Project Name 2</h3>
-        <p class="text-gray-600">Java, Hibernate</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu magna id lacus dapibus vulputate. Sed
-          nec libero vestibulum, congue risus vel, ultrices risus.
-        </p>
-      </li>
-      <!-- Add more projects if needed -->
-    </ul>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact">
-    <h2 class="text-2xl font-semibold mb-4">Contact</h2>
-    <p>
-      Feel free to reach out to me via email or phone:
-      <br>
-      Email: <a class="text-blue-600 hover:underline" href="mailto:john.doe@example.com">john.doe@example.com</a>
-      <br>
-      Phone: <span class="text-blue-600">123-456-7890</span>
-    </p>
-    <form class="mt-6">
-      <div class="flex flex-wrap -mx-3 mb-4">
-        <div class="w-full md:w-1/2 px-3 mb-4 md:mb-0">
-          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="contact-name">
-            Name
-          </label>
-          <input
-                  class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                  id="contact-name" type="text" placeholder="Your Name">
-        </div>
-        <div class="w-full md:w-1/2 px-3">
-          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="contact-email">
-            Email
-          </label>
-          <input
-                  class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="contact-email" type="email" placeholder="example@example.com">
-        </div>
-      </div>
-      <div class="flex flex-wrap -mx-3 mb-4">
-        <div class="w-full px-3">
-          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="contact-message">
-            Message
-          </label>
-          <textarea
-                  class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="contact-message" rows="6" placeholder="Your Message"></textarea>
-        </div>
-      </div>
-      <div class="flex justify-end">
-        <button
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="button">
-          Send
-        </button>
-      </div>
-    </form>
-  </section>
-</main>
-
-<!-- Footer -->
-<footer class="bg-gray-200 text-center py-4">
-  <p class="text-sm text-gray-600">© 2023 Software Engineer Portfolio. All rights reserved.</p>
-</footer>
-
-<!-- Scripts -->
-<script src="path/to/your/javascript/file.js"></script>
-</body>
-
-</html>
-
-
-
-<!-- Contact Section -->
-<section id="contact">
-  <h2 class="text-2xl font-semibold mb-4">Contact</h2>
-  <p>
-    Feel free to reach out to me via email or phone:
-    <br>
-    Email: <a class="text-blue-600 hover:underline" href="mailto:john.doe@example.com">john.doe@example.com</a>
-    <br>
-    Phone: <span class="text-blue-600">123-456-7890</span>
-  </p>
-  <div class="mt-6">
-    <h3 class="text-lg font-semibold mb-2">Social Media</h3>
-    <div class="flex">
-      <a href="#" class="mr-4 text-blue-600 hover:text-blue-800">
-        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4.73 5.38a7.98 7.98 0 0 1 0 13.24M14 18h-3.5a1.5 1.5 0 0 1-1.5-1.5v-5a1.5 1.5 0 0 1 1.5-1.5h1a1 1 0 0 1 1 1v1h2a1 1 0 0 1 1 1v3.5a1.5 1.5 0 0 1-1.5 1.5zM8 6.5a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0z" />
-        </svg>
-      </a>
-      <a href="#" class="mr-4 text-blue-600 hover:text-blue-800">
-        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      </a>
-      <a href="#" class="mr-4 text-blue-600 hover:text-blue-800">
-        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 6.75v10.5l-1.4 1.4A2.25 2.25 0 0 1 17.25 21H6.75A2.25 2.25 0 0 1 4.5 18.75V7.25A2.25 2.25 0 0 1 6.75 5h10.5A2.25 2.25 0 0 1 19.5 7.25V8h-1.5V7.25a.75.75 0 0 0-.75-.75h-10.5a.75.75 0 0 0-.75.75v11.5a.75.75 0 0 0 .75.75h11.5a.75.75 0 0 0 .75-.75v-1.5h1.5v1.5A2.25 2.25 0 0 1 17.25 23H6.75A2.25 2.25 0 0 1 4.5 20.75V4.25A2.25 2.25 0 0 1 6.75 2h10.5A2.25 2.25 0 0 1 19.5 4.25v1.5h1.5v-1.5A2.25 2.25 0 0 0 17.25 0H6.75A2.25 2.25 0 0 0 4.5 2.25v16.5A2.25 2.25 0 0 0 6.75 21h10.5A2.25 2.25 0 0 0 19.5 18.75v-7.5h1.5z" />
-        </svg>
-      </a>
-      <!-- Add more social media links if needed -->
-    </div>
-  </div>
-</section>
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Software Engineer Portfolio</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    /* Additional custom styles can be added here */
-  </style>
-</head>
-
-<body class="bg-gray-100 text-gray-900 font-sans">
-<!-- Header -->
-<header class="bg-white shadow">
-  <div class="container mx-auto px-4">
-    <div class="flex items-center justify-between py-4">
-      <h1 class="text-xl font-semibold">Software Engineer Portfolio</h1>
-      <nav>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="index.html">Home</a>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#skills">Skills</a>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#projects">Projects</a>
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2" href="#contact">Contact</a>
-      </nav>
-    </div>
-  </div>
-</header>
-
-<!-- Main Content -->
-<main class="container mx-auto px-4 py-8">
-  <!-- Skills Section -->
-  <section id="skills" class="mb-8">
-    <h2 class="text-2xl font-semibold mb-4">Skills</h2>
-    <ul class="grid grid-cols-2 md:grid-cols-3 gap-4">
-      <li class="bg-white shadow-md rounded-md p-4">
-        <h3 class="text-lg font-semibold mb-2">Java</h3>
-        <p class="text-gray-600">Intermediate</p>
-      </li>
-      <li class="bg-white shadow-md rounded-md p-4">
-        <h3 class="text-lg font-semibold mb-2">Spring Boot</h3>
-        <p class="text-gray-600">Intermediate</p>
-      </li>
-      <li class="bg-white shadow-md rounded-md p-4">
-        <h3 class="text-lg font-semibold mb-2">Hibernate</h3>
-        <p class="text-gray-600">Intermediate</p>
-      </li>
-      <!-- Add more skills if needed -->
-    </ul>
-  </section>
-</main>
-
-<!-- Footer -->
-<footer class="bg-gray-900 text-white py-4">
-  <div class="container mx-auto px-4">
-    <p class="text-center">&copy; 2023 Software Engineer Portfolio. All rights reserved.</p>
-  </div>
-</footer>
-</body>
-
-</html>

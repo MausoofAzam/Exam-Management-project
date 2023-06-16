@@ -15,63 +15,72 @@ const toggleSidebar = () => {
 };
 
 
-        function storeSelectedOptions() {
+    function storeSelectedOption(questionId, selectedOption) {
+      let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+      selectedOptions[questionId] = selectedOption;
+      sessionStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
+    }
 
-          let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
-          let questionIds = document.querySelectorAll("input[name='questionIds[]']");
-          for (let i = 0; i < questionIds.length; i++) {
-            let questionId = questionIds[i].value;
-            let selectedOption = document.querySelector("input[name='question-" + questionId + "']:checked");
-            if (selectedOption) {
-              selectedOptions[questionId] = selectedOption.value;
-            }
-          }
-          sessionStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
-        }
+   // Attach event listeners to the radio buttons
+   let radioButtons = document.querySelectorAll("input[type='radio']");
+   radioButtons.forEach(function(radioButton) {
+     radioButton.addEventListener("click", function() {
+       let questionId = this.name.replace("question-", "");
+       let selectedOption = this.value;
+       storeSelectedOption(questionId, selectedOption);
+       updateCheckboxes();
+     });
+   });
 
-        // Store the selected options when the next button is clicked
-        if(document.getElementById("next-button")){
-        document.getElementById("next-button").addEventListener("click", function(event) {
-          event.preventDefault();
-          storeSelectedOptions();
-          window.location.href = this.href;
-        });}
 
-        // Submit the form with the stored selected options when the last page is reached
-        if (document.querySelector(".submit")) {
+    // Attach event listeners to the option labels
+    let optionLabels = document.querySelectorAll(".option label");
+    console.log(optionLabels);
+    optionLabels.forEach(function(label) {
+      label.addEventListener("click", function() {
+        let radioButton = document.querySelector("#" + this.getAttribute("for"));
+        console.log("Label clicked");
+        radioButton.click();
+      });
+    });
 
-          storeSelectedOptions();
-          let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
-          for (let questionId in selectedOptions) {
-            let input = document.createElement("input");
-            input.type = "hidden";
-            input.name = "question-" + questionId;
-            input.value = selectedOptions[questionId];
-            document.getElementById("question-form").appendChild(input);
-          }
-          for (let questionId in selectedOptions) {
-            let input = document.createElement("input");
-            input.type = "hidden";
-            input.name = "questionIds[]";
-            input.value = questionId;
-            document.getElementById("question-form").appendChild(input);
-          }
+    // Submit the form with the stored selected options when the last page is reached
+    if (document.querySelector(".submit")) {
+      let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
 
-}
+      for (let questionId in selectedOptions) {
+        let input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "question-" + questionId;
+        input.value = selectedOptions[questionId];
+        document.getElementById("question-form").appendChild(input);
+      }
 
-/* function to store the options in storage session*/
-function setSelectedOptions() {
-    let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
-    for (let questionId in selectedOptions) {
+      for (let questionId in selectedOptions) {
+        let input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "questionIds[]";
+        input.value = questionId;
+        document.getElementById("question-form").appendChild(input);
+      }
+    }
+
+    // Function to set the options based on the stored values in the session
+    function setSelectedOptions() {
+      let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+
+      for (let questionId in selectedOptions) {
         let selectedOption = selectedOptions[questionId];
         let optionElement = document.querySelector("input[name='question-" + questionId + "'][value='" + selectedOption + "']");
         if (optionElement) {
-            optionElement.checked = true;
+          optionElement.checked = true;
         }
+      }
     }
-}
 
-setSelectedOptions();
+    setSelectedOptions();
+
+
 
 
 
@@ -118,6 +127,10 @@ const timer = setInterval(() => {
 }, 1000);
 
 
+
+
+
+
 // Retrieve the user ID from the HTML page
 const userIdElement = document.querySelector('.selected-info h5 span');
 const userId = userIdElement.textContent;
@@ -128,6 +141,10 @@ fetch(`/user/get-question-ids?userId=${userId}`)
   .then(data => {
     const idlist = data;
     const questionList = document.getElementById('question-list');
+
+    // Get the selected options from session storage
+    let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+
     for (let i = 0; i < idlist.length; i++) {
       const li = document.createElement('li');
       li.setAttribute('data-question-id', idlist[i]);
@@ -138,66 +155,49 @@ fetch(`/user/get-question-ids?userId=${userId}`)
       li.appendChild(span);
 
       // add a non-breaking space after the question number
-      li.innerHTML += ' ';
-
-      questionList.appendChild(li);
-    }
-
-    // get the selected options from session storage
-    let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
-
-    // get the list items in the question list
-    let listItems = document.querySelectorAll('#question-list li');
-
-    // iterate through the list items
-    for (let i = 0; i < listItems.length; i++) {
-      let li = listItems[i];
-
-      // retrieve the question ID from the data-question-id attribute
-      let questionId = li.getAttribute('data-question-id');
+      li.innerHTML += ' ';
 
       // create a checkbox element
-      let checkbox = document.createElement('input');
+      const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
 
       // check if the question has been answered
-      if (selectedOptions.hasOwnProperty(questionId)) {
-        // check the checkbox to indicate that the question has been answered
+      if (selectedOptions.hasOwnProperty(idlist[i])) {
+        console.log('checkbox selected');
         checkbox.checked = true;
-      } else {
-        // leave the checkbox unchecked to indicate that the question has been skipped
-        checkbox.checked = false;
       }
+
+      // attach a click event listener to the checkbox
+      checkbox.addEventListener('click', function() {
+        let questionId = this.parentNode.getAttribute('data-question-id');
+        let selectedOption = this.checked ? this.value : null;
+        storeSelectedOption(questionId, selectedOption);
+      });
 
       // append the checkbox to the list item
       li.appendChild(checkbox);
-    }
-  });
 
-function unselectCheckbox() {
-  let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
-  let questionIds = document.querySelectorAll("input[name='questionIds[]']");
-  for (let i = 0; i < questionIds.length; i++) {
-    let questionId = questionIds[i].value;
-    if (selectedOptions.hasOwnProperty(questionId)) {
-      delete selectedOptions[questionId];
-      let optionElement = document.querySelector("input[name='question-" + questionId + "']:checked");
-      if (optionElement) {
-        optionElement.checked = false;
+      // If the option is selected, set the checkbox as checked
+      if (selectedOptions.hasOwnProperty(idlist[i])) {
+        checkbox.checked = true;
       }
-    }
-  }
-  sessionStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
-}
 
-// Unselect the checkbox when clicking the previous button
-if (document.getElementById("previous-button")) {
-  document.getElementById("previous-button").addEventListener("click", function(event) {
-    event.preventDefault();
-    unselectCheckbox();
-    window.location.href = this.href;
+      // append the list item to the question list
+      questionList.appendChild(li);
+    }
+  });
+function updateCheckboxes() {
+  // Get the selected options from session storage
+  let selectedOptions = JSON.parse(sessionStorage.getItem("selectedOptions")) || {};
+
+  // Get all the checkboxes
+  let checkboxes = document.querySelectorAll("#question-list input[type='checkbox']");
+
+  // Update the state of each checkbox
+  checkboxes.forEach(function(checkbox) {
+    let questionId = checkbox.parentNode.getAttribute('data-question-id');
+    checkbox.checked = selectedOptions.hasOwnProperty(questionId);
   });
 }
-
 
 
